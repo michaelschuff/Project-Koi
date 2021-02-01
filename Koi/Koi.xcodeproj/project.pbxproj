@@ -23,9 +23,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C83378025C7752B00A2E259 /* koiPixelGameEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = koiPixelGameEngine.h; sourceTree = "<group>"; };
+		4C83378425C779F400A2E259 /* olcPixelGameEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = olcPixelGameEngine.h; sourceTree = "<group>"; };
 		4CA4791A25B7931A00BFC6DA /* Koi */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Koi; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CA4791D25B7931A00BFC6DA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		4CA4791F25B7931A00BFC6DA /* olcPixelGameEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = olcPixelGameEngine.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,7 +60,8 @@
 			isa = PBXGroup;
 			children = (
 				4CA4791D25B7931A00BFC6DA /* main.cpp */,
-				4CA4791F25B7931A00BFC6DA /* olcPixelGameEngine.h */,
+				4C83378025C7752B00A2E259 /* koiPixelGameEngine.h */,
+				4C83378425C779F400A2E259 /* olcPixelGameEngine.h */,
 			);
 			path = Koi;
 			sourceTree = "<group>";

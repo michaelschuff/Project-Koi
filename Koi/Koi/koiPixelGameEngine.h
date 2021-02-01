@@ -1,5 +1,5 @@
 /*
-  License (OLC-3)
+  License (KOI-3)
   ~~~~~~~~~~~~~~~
 
   Copyright 2018 - 2020 OneLoneCoder.com
@@ -28,38 +28,10 @@
   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
   SUCH DAMAGE.
-
-  Thanks
-  ~~~~~~
-  I'd like to extend thanks to Bispoo, Eremiell, slavka, gurkanctn, Phantim, IProgramInCPP
-  JackOJC, KrossX, Huhlig, Dragoneye, Appa, JustinRichardsMusic, SliceNDice, dandistine
-  Ralakus, Gorbit99, raoul, joshinils, benedani, Moros1138, Alexio, SaladinAkara & MagetzUb
-  for advice, ideas and testing, and I'd like to extend my appreciation to the
-  200K YouTube followers, 80+ Patreons and 10K Discord server members who give me
-  the motivation to keep going with all this :D
-
-  Significant Contributors: @Moros1138, @SaladinAkara, @MaGetzUb, @slavka,
-                          @Dragoneye, @Gorbit99 & @Mumflr
-
-  Special thanks to those who bring gifts!
-  GnarGnarHead.......Domina
-  Gorbit99...........Bastion, Ori & The Blind Forest, Terraria
-  Marti Morta........Gris
-  Danicron...........Terraria
-  SaladinAkara.......Aseprite
-  AlterEgo...........Final Fantasy XII - The Zodiac Age
-  SlicEnDicE.........Noita
-
-  Special thanks to my Patreons too - I wont name you on here, but I've
-  certainly enjoyed my tea and flapjacks :D
-
-  Author
-  ~~~~~~
-  David Barr, aka javidx9, �OneLoneCoder 2018, 2019, 2020
 */
 
-#ifndef OLC_PGE_DEF
-#define OLC_PGE_DEF
+#ifndef KOI_PGE_DEF
+#define KOI_PGE_DEF
 
 // MARK: Standard Includes
 #include <cmath>
@@ -115,19 +87,19 @@ namespace _gfs = std::filesystem;
 #endif
 
 #if defined(UNICODE) || defined(_UNICODE)
-#define olcT(s) L##s
+#define koiT(s) L##s
 #else
-#define olcT(s) s
+#define koiT(s) s
 #endif
 
 #define UNUSED(x) (void)(x)
 
-#if !defined(OLC_GFX_OPENGL33) && !defined(OLC_GFX_DIRECTX10)
-#define OLC_GFX_OPENGL10
+#if !defined(KOI_GFX_OPENGL33) && !defined(KOI_GFX_DIRECTX10)
+#define KOI_GFX_OPENGL10
 #endif
 
 #if defined(_WIN32)
-#if defined(OLC_IMAGE_STB)
+#if defined(KOI_IMAGE_STB)
 #define PGE_ILOADER_STB
 #else
 #define PGE_ILOADER_GDI
@@ -135,18 +107,18 @@ namespace _gfs = std::filesystem;
 #endif
 
 #if defined(__linux__) || defined(__APPLE__)
-#if defined(OLC_IMAGE_STB)
+#if defined(KOI_IMAGE_STB)
 #define PGE_ILOADER_STB
 #else
 #define PGE_ILOADER_LIBPNG
 #endif
 #endif
 
-// MARK: olcPixelGameEngine
+// MARK: koiPixelGameEngine
 // +------------------------------------------------------------------------------+
-// | olcPixelGameEngine INTERFACE DECLARATION                                     |
+// | koiPixelGameEngine INTERFACE DECLARATION                                     |
 // +------------------------------------------------------------------------------+
-namespace olc {
+namespace koi {
     class PixelGameEngine;
     class Sprite;
     
@@ -156,9 +128,9 @@ namespace olc {
     constexpr uint32_t nDefaultPixel = (nDefaultAlpha << 24);
     enum rcode { FAIL = 0, OK = 1, NO_FILE = -1 };
     
-    // MARK: olc::Pixel
+    // MARK: koi::Pixel
     // +------------------------------------------------------------------------------+
-    // | olc::Pixel - Represents a 32-Bit RGBA colour                                 |
+    // | koi::Pixel - Represents a 32-Bit RGBA colour                                 |
     // +------------------------------------------------------------------------------+
     struct Pixel {
         union {
@@ -202,11 +174,11 @@ namespace olc {
     };
     
     
-    // MARK: olc::vX2d
+    // MARK: koi::vX2d
     // +------------------------------------------------------------------------------+
-    // | olc::vX2d - A generic 2D vector type                                         |
+    // | koi::vX2d - A generic 2D vector type                                         |
     // +------------------------------------------------------------------------------+
-#if !defined(OLC_IGNORE_VEC2D)
+#if !defined(KOI_IGNORE_VEC2D)
     template <class T>
     struct Vector2 {
         T x = 0, y = 0;
@@ -261,9 +233,9 @@ namespace olc {
 #endif
     
     
-    // MARK: olc::HWButton
+    // MARK: koi::HWButton
     // +------------------------------------------------------------------------------+
-    // | olc::HWButton - Represents the state of a hardware button (mouse/key/joy)    |
+    // | koi::HWButton - Represents the state of a hardware button (mouse/key/joy)    |
     // +------------------------------------------------------------------------------+
     struct HWButton {
         bool bPressed = false;  // Set once during the frame the event occurs
@@ -272,9 +244,9 @@ namespace olc {
     };
     
     
-    // MARK: olc::Sprite
+    // MARK: koi::Sprite
     // +------------------------------------------------------------------------------+
-    // | olc::Sprite - An image represented by a 2D array of olc::Pixel               |
+    // | koi::Sprite - An image represented by a 2D array of koi::Pixel               |
     // +------------------------------------------------------------------------------+
     class Sprite {
     public:
@@ -289,52 +261,52 @@ namespace olc {
     public:
         Pixel GetPixel(int32_t x, int32_t y) const;
         bool  SetPixel(int32_t x, int32_t y, Pixel p);
-        Pixel GetPixel(const olc::Vector2i& a) const;
-        bool  SetPixel(const olc::Vector2i& a, Pixel p);
+        Pixel GetPixel(const koi::Vector2i& a) const;
+        bool  SetPixel(const koi::Vector2i& a, Pixel p);
         Pixel* GetData();
         Pixel* pColData = nullptr;
         Mode modeSample = Mode::NORMAL;
     };
     
-    // MARK: olc::Renderer
+    // MARK: koi::Renderer
     // +------------------------------------------------------------------------------+
-    // | olc::Renderer - Renders                                                      |
+    // | koi::Renderer - Renders                                                      |
     // +------------------------------------------------------------------------------+
     class Renderer {
     public:
         virtual ~Renderer() = default;
         virtual void       PrepareDevice() = 0;
-        virtual olc::rcode CreateDevice(std::vector<void*> params, bool bFullScreen, bool bVSYNC) = 0;
-        virtual olc::rcode DestroyDevice() = 0;
+        virtual koi::rcode CreateDevice(std::vector<void*> params, bool bFullScreen, bool bVSYNC) = 0;
+        virtual koi::rcode DestroyDevice() = 0;
         virtual void       DisplayFrame() = 0;
         virtual void       PrepareDrawing() = 0;
-        virtual void       DrawWindowQuad(const olc::Vector2f& offset, const olc::Vector2f& scale, const olc::Pixel tint) = 0;
+        virtual void       DrawWindowQuad(const koi::Vector2f& offset, const koi::Vector2f& scale, const koi::Pixel tint) = 0;
         virtual uint32_t   CreateTexture(const uint32_t width, const uint32_t height) = 0;
-        virtual void       UpdateTexture(uint32_t id, olc::Sprite* spr) = 0;
+        virtual void       UpdateTexture(uint32_t id, koi::Sprite* spr) = 0;
         virtual uint32_t   DeleteTexture(const uint32_t id) = 0;
         virtual void       ApplyTexture(uint32_t id) = 0;
-        virtual void       UpdateViewport(const olc::Vector2i& pos, const olc::Vector2i& size) = 0;
-        virtual void       ClearBuffer(olc::Pixel p, bool bDepth) = 0;
-        static olc::PixelGameEngine* ptrPGE;
+        virtual void       UpdateViewport(const koi::Vector2i& pos, const koi::Vector2i& size) = 0;
+        virtual void       ClearBuffer(koi::Pixel p, bool bDepth) = 0;
+        static koi::PixelGameEngine* ptrPGE;
     };
     
-    // MARK: olc::Platform
+    // MARK: koi::Platform
     // +------------------------------------------------------------------------------+
-    // | olc::Platform - Various Platform related things                              |
+    // | koi::Platform - Various Platform related things                              |
     // +------------------------------------------------------------------------------+
     class Platform {
     public:
         virtual ~Platform() = default;
-        virtual olc::rcode ApplicationStartUp() = 0;
-        virtual olc::rcode ApplicationCleanUp() = 0;
-        virtual olc::rcode ThreadStartUp() = 0;
-        virtual olc::rcode ThreadCleanUp() = 0;
-        virtual olc::rcode CreateGraphics(bool bFullScreen, bool bEnableVSYNC, const olc::Vector2i& vViewPos, const olc::Vector2i& vViewSize) = 0;
-        virtual olc::rcode CreateWindowPane(const olc::Vector2i& vWindowPos, olc::Vector2i& vWindowSize, bool bFullScreen) = 0;
-        virtual olc::rcode SetWindowTitle(const std::string& s) = 0;
-        virtual olc::rcode StartSystemEventLoop() = 0;
-        virtual olc::rcode HandleSystemEvent() = 0;
-        static olc::PixelGameEngine* ptrPGE;
+        virtual koi::rcode ApplicationStartUp() = 0;
+        virtual koi::rcode ApplicationCleanUp() = 0;
+        virtual koi::rcode ThreadStartUp() = 0;
+        virtual koi::rcode ThreadCleanUp() = 0;
+        virtual koi::rcode CreateGraphics(bool bFullScreen, bool bEnableVSYNC, const koi::Vector2i& vViewPos, const koi::Vector2i& vViewSize) = 0;
+        virtual koi::rcode CreateWindowPane(const koi::Vector2i& vWindowPos, koi::Vector2i& vWindowSize, bool bFullScreen) = 0;
+        virtual koi::rcode SetWindowTitle(const std::string& s) = 0;
+        virtual koi::rcode StartSystemEventLoop() = 0;
+        virtual koi::rcode HandleSystemEvent() = 0;
+        static koi::PixelGameEngine* ptrPGE;
     };
     
     
@@ -343,18 +315,18 @@ namespace olc {
     static std::unique_ptr<Platform> platform;
     static std::map<size_t, uint8_t> mapKeys;
     
-    // MARK: olc::PixelGameEngine
+    // MARK: koi::PixelGameEngine
     // +------------------------------------------------------------------------------+
-    // | olc::PixelGameEngine - The main BASE class for your application              |
+    // | koi::PixelGameEngine - The main BASE class for your application              |
     // +------------------------------------------------------------------------------+
     class PixelGameEngine {
     public:
         PixelGameEngine();
         virtual ~PixelGameEngine();
     public:
-        olc::rcode Construct(int32_t screen_w, int32_t screen_h, int32_t pixel_w, int32_t pixel_h,
+        koi::rcode Construct(int32_t screen_w, int32_t screen_h, int32_t pixel_w, int32_t pixel_h,
                              bool full_screen = false, bool vsync = false, bool cohesion = false);
-        olc::rcode Start();
+        koi::rcode Start();
         
     public: // User Override Interfaces
         virtual bool OnUserCreate();                    // Called once on application startup, use to load your resources
@@ -369,48 +341,50 @@ namespace olc {
         int32_t GetMouseX() const;                      // Get Mouse X coordinate in "pixel" space
         int32_t GetMouseY() const;                      // Get Mouse Y coordinate in "pixel" space
         int32_t GetMouseWheel() const;                  // Get Mouse Wheel Delta
-        const olc::Vector2i& GetWindowMouse() const;    // Get the mouse in window space
-        const olc::Vector2i& GetMousePos() const;       // Gets the mouse as a vector to keep Tarriest happy
+        const koi::Vector2i& GetWindowMouse() const;    // Get the mouse in window space
+        const koi::Vector2i& GetMousePos() const;       // Gets the mouse as a vector to keep Tarriest happy
         
     public: // Utility
-            
+        Pixel* pColData = nullptr;
+        Pixel::Mode modeSample = Pixel::Mode::NORMAL;
+        
         int32_t ScreenWidth() const;                        // Returns the width of the screen in "pixels"
         int32_t ScreenHeight() const;                       // Returns the height of the screen in "pixels"
         int32_t GetDrawTargetWidth() const;                 // Returns the width of the currently selected drawing target in "pixels"
         int32_t GetDrawTargetHeight() const;                // Returns the height of the currently selected drawing target in "pixels"
-        olc::Sprite* GetDrawTarget() const;                 // Returns the currently active draw target
+        koi::Sprite* GetDrawTarget() const;                 // Returns the currently active draw target
         void SetScreenSize(int w, int h);                   // Resize the primary screen sprite
         uint32_t GetFPS() const;                            // Gets the current Frames Per Second
         float GetElapsedTime() const;                       // Gets last update of elapsed time
-        const olc::Vector2i& GetWindowSize() const;         // Gets Actual Window size
-        const olc::Vector2i& GetPixelSize() const;          // Gets pixel scale
-        const olc::Vector2i& GetScreenPixelSize() const;    // Gets actual pixel scale
+        const koi::Vector2i& GetWindowSize() const;         // Gets Actual Window size
+        const koi::Vector2i& GetPixelSize() const;          // Gets pixel scale
+        const koi::Vector2i& GetScreenPixelSize() const;    // Gets actual pixel scale
         
     public: // CONFIGURATION ROUTINES
         // window targeting functions
         void EnableWindow(bool b);
-        void SetWindowOffset(const olc::Vector2f& offset);
+        void SetWindowOffset(const koi::Vector2f& offset);
         void SetWindowOffset(float x, float y);
-        void SetWindowScale(const olc::Vector2f& scale);
+        void SetWindowScale(const koi::Vector2f& scale);
         void SetWindowScale(float x, float y);
-        void SetWindowTint(const olc::Pixel& tint);
+        void SetWindowTint(const koi::Pixel& tint);
         void SetWindowCustomRenderFunction(std::function<void()> f);
         
         
         // Change the pixel mode for different optimisations
-        // olc::Pixel::NORMAL = No transparency
-        // olc::Pixel::MASK   = Transparent if alpha is < 255
-        // olc::Pixel::ALPHA  = Full transparency
+        // koi::Pixel::NORMAL = No transparency
+        // koi::Pixel::MASK   = Transparent if alpha is < 255
+        // koi::Pixel::ALPHA  = Full transparency
         void SetPixelMode(Pixel::Mode m);
         Pixel::Mode GetPixelMode();
-        void SetPixelMode(std::function<olc::Pixel(const int x, const int y, const olc::Pixel& pSource, const olc::Pixel& pDest)> pixelMode);   // Use a custom blend function
+        void SetPixelMode(std::function<koi::Pixel(const int x, const int y, const koi::Pixel& pSource, const koi::Pixel& pDest)> pixelMode);   // Use a custom blend function
         void SetPixelBlend(float fBlend);   // Change the blend factor form between 0.0f to 1.0f;
         
         
         
     public: // DRAWING ROUTINES
-        virtual bool Draw(int32_t x, int32_t y, Pixel p = olc::WHITE);
-        bool Draw(const olc::Vector2i& pos, Pixel p = olc::WHITE);
+        virtual bool Draw(int32_t x, int32_t y, Pixel p = koi::WHITE);
+        bool Draw(const koi::Vector2i& pos, Pixel p = koi::WHITE);
         
         void Clear(Pixel p);
         void ClearBuffer(Pixel p, bool bDepth = true);  // Clears the rendering back buffer
@@ -422,20 +396,20 @@ namespace olc {
     private: // Inner mysterious workings
         Pixel::Mode     nPixelMode = Pixel::NORMAL;
         float           fBlendFactor = 1.0f;
-        olc::Vector2i   vScreenSize = { 256, 240 };
-        olc::Vector2f   vInvScreenSize = { 1.0f / 256.0f, 1.0f / 240.0f };
-        olc::Vector2i   vPixelSize = { 4, 4 };
-        olc::Vector2i   vScreenPixelSize = { 4, 4 };
-        olc::Vector2i   vMousePos = { 0, 0 };
+        koi::Vector2i   vScreenSize = { 256, 240 };
+        koi::Vector2f   vInvScreenSize = { 1.0f / 256.0f, 1.0f / 240.0f };
+        koi::Vector2i   vPixelSize = { 4, 4 };
+        koi::Vector2i   vScreenPixelSize = { 4, 4 };
+        koi::Vector2i   vMousePos = { 0, 0 };
         int32_t         nMouseWheelDelta = 0;
-        olc::Vector2i   vMousePosCache = { 0, 0 };
-        olc::Vector2i   vMouseWindowPos = { 0, 0 };
+        koi::Vector2i   vMousePosCache = { 0, 0 };
+        koi::Vector2i   vMouseWindowPos = { 0, 0 };
         int32_t         nMouseWheelDeltaCache = 0;
-        olc::Vector2i   vWindowSize = { 0, 0 };
-        olc::Vector2i   vViewPos = { 0, 0 };
-        olc::Vector2i   vViewSize = { 0,0 };
+        koi::Vector2i   vWindowSize = { 0, 0 };
+        koi::Vector2i   vViewPos = { 0, 0 };
+        koi::Vector2i   vViewSize = { 0,0 };
         bool            bFullScreen = false;
-        olc::Vector2f   vPixel = { 1.0f, 1.0f };
+        koi::Vector2f   vPixel = { 1.0f, 1.0f };
         bool            bHasInputFocus = false;
         bool            bHasMouseFocus = false;
         bool            bEnableVSYNC = false;
@@ -444,15 +418,15 @@ namespace olc {
         int             nFrameCount = 0;
         uint32_t        nLastFPS = 0;
         bool            bPixelCohesion = false;
-        std::function<olc::Pixel(const int x, const int y, const olc::Pixel&, const olc::Pixel&)> funcPixelMode;
+        std::function<koi::Pixel(const int x, const int y, const koi::Pixel&, const koi::Pixel&)> funcPixelMode;
         std::chrono::time_point<std::chrono::system_clock> m_tp1, m_tp2;
         
         // Window vars
-        olc::Vector2f   vOffset = { 0, 0 };
-        olc::Vector2f   vScale = { 1, 1 };
-        olc::Sprite*    pDrawTarget = nullptr;
+        koi::Vector2f   vOffset = { 0, 0 };
+        koi::Vector2f   vScale = { 1, 1 };
+        koi::Sprite*    pDrawTarget = nullptr;
         uint32_t        nResID = 0;
-        olc::Pixel      tint = olc::WHITE;
+        koi::Pixel      tint = koi::WHITE;
         std::function<void()> funcHook = nullptr;
         
         
@@ -469,45 +443,45 @@ namespace olc {
         
         void EngineThread(); // The main engine thread
         
-        void olc_ConfigureSystem(); // At the end of this file, chooses which components to compile
+        void koi_ConfigureSystem(); // At the end of this file, chooses which components to compile
         
         static std::atomic<bool> bAtomActive; // Shutdown flag
         
     public:
-        void olc_UpdateMouse(int32_t x, int32_t y);
-        void olc_UpdateMouseWheel(int32_t delta);
-        void olc_UpdateWindowSize(int32_t x, int32_t y);
-        void olc_UpdateViewport();
-        void olc_ConstructFontSheet();
-        void olc_CoreUpdate();
-        void olc_PrepareEngine();
-        void olc_UpdateMouseState(int32_t button, bool state);
-        void olc_UpdateKeyState(int32_t key, bool state);
-        void olc_UpdateMouseFocus(bool state);
-        void olc_UpdateKeyFocus(bool state);
-        void olc_Terminate();
+        void koi_UpdateMouse(int32_t x, int32_t y);
+        void koi_UpdateMouseWheel(int32_t delta);
+        void koi_UpdateWindowSize(int32_t x, int32_t y);
+        void koi_UpdateViewport();
+        void koi_ConstructFontSheet();
+        void koi_CoreUpdate();
+        void koi_PrepareEngine();
+        void koi_UpdateMouseState(int32_t button, bool state);
+        void koi_UpdateKeyState(int32_t key, bool state);
+        void koi_UpdateMouseFocus(bool state);
+        void koi_UpdateKeyFocus(bool state);
+        void koi_Terminate();
         
     };
 }
 
-#endif // OLC_PGE_DEF
+#endif // KOI_PGE_DEF
 
 
 
-// MARK: OLC_PGE_APPLICATION
+// MARK: KOI_PGE_APPLICATION
 // +------------------------------------------------------------------------------+
-// | START OF OLC_PGE_APPLICATION                                                 |
+// | START OF KOI_PGE_APPLICATION                                                 |
 // +------------------------------------------------------------------------------+
-#ifdef OLC_PGE_APPLICATION
-#undef OLC_PGE_APPLICATION
+#ifdef KOI_PGE_APPLICATION
+#undef KOI_PGE_APPLICATION
 
 
 // +------------------------------------------------------------------------------+
-// | olcPixelGameEngine INTERFACE IMPLEMENTATION (CORE)                           |
+// | koiPixelGameEngine INTERFACE IMPLEMENTATION (CORE)                           |
 // | Note: The core implementation is platform independent                        |
 // +------------------------------------------------------------------------------+
-// MARK: olc::Pixel impl;
-namespace olc {
+// MARK: koi::Pixel impl;
+namespace koi {
     Pixel::Pixel() { r = 0; g = 0; b = 0; a = nDefaultAlpha; }
     
     Pixel::Pixel(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
@@ -526,8 +500,8 @@ namespace olc {
 }
 
 
-// MARK: olc::Sprite impl;
-namespace olc {
+// MARK: koi::Sprite impl;
+namespace koi {
     Sprite::Sprite(int32_t w, int32_t h) {
         if (pColData) delete[] pColData;
         width = w;    height = h;
@@ -536,19 +510,12 @@ namespace olc {
     }
     
     Sprite::~Sprite() { if (pColData) delete[] pColData; }
-    Pixel Sprite::GetPixel(const olc::Vector2i& a) const { return GetPixel(a.x, a.y); }
+    Pixel Sprite::GetPixel(const koi::Vector2i& a) const { return GetPixel(a.x, a.y); }
     
-    bool Sprite::SetPixel(const olc::Vector2i& a, Pixel p) { return SetPixel(a.x, a.y, p); }
-    
+    bool Sprite::SetPixel(const koi::Vector2i& a, Pixel p) { return SetPixel(a.x, a.y, p); }
+
     Pixel Sprite::GetPixel(int32_t x, int32_t y) const {
-        if (modeSample == olc::Sprite::Mode::NORMAL) {
-            if (x >= 0 && x < width && y >= 0 && y < height)
-                return pColData[y * width + x];
-            else
-                return Pixel(0, 0, 0, 0);
-        } else {
-            return pColData[abs(y % height) * width + abs(x % width)];
-        }
+        return (modeSample == koi::Sprite::Mode::NORMAL) ? ((x >= 0 && x < width && y >= 0 && y < height) ? pColData[y * width + x] : BLANK) : pColData[abs(y%height)*width + abs(x%width)];
     }
     
     bool Sprite::SetPixel(int32_t x, int32_t y, Pixel p) {
@@ -564,20 +531,20 @@ namespace olc {
 }
 
 
-// MARK: olc::PixelGameEngine impl;
-namespace olc {
+// MARK: koi::PixelGameEngine impl;
+namespace koi {
     PixelGameEngine::PixelGameEngine() {
         sAppName = "Undefined";
         
         // Bring in relevant Platform & Rendering systems depending
         // on compiler parameters
-        olc_ConfigureSystem();
+        koi_ConfigureSystem();
     }
     
     PixelGameEngine::~PixelGameEngine() { }
     
     
-    olc::rcode PixelGameEngine::Construct(int32_t screen_w, int32_t screen_h, int32_t pixel_w, int32_t pixel_h, bool full_screen, bool vsync, bool cohesion) {
+    koi::rcode PixelGameEngine::Construct(int32_t screen_w, int32_t screen_h, int32_t pixel_w, int32_t pixel_h, bool full_screen, bool vsync, bool cohesion) {
         bPixelCohesion = cohesion;
         vScreenSize = { screen_w, screen_h };
         vInvScreenSize = { 1.0f / float(screen_w), 1.0f / float(screen_h) };
@@ -588,10 +555,10 @@ namespace olc {
         vPixel = 2.0f / vScreenSize;
         
         if (vPixelSize.x <= 0 || vPixelSize.y <= 0 || vScreenSize.x <= 0 || vScreenSize.y <= 0)
-            return olc::FAIL;
+            return koi::FAIL;
         
         
-        return olc::OK;
+        return koi::OK;
     }
     
     
@@ -601,19 +568,19 @@ namespace olc {
         delete pDrawTarget; // Erase existing window sprites
         pDrawTarget = new Sprite(vScreenSize.x, vScreenSize.y);
         
-        renderer->ClearBuffer(olc::BLACK, true);
+        renderer->ClearBuffer(koi::BLACK, true);
         renderer->DisplayFrame();
-        renderer->ClearBuffer(olc::BLACK, true);
+        renderer->ClearBuffer(koi::BLACK, true);
         renderer->UpdateViewport(vViewPos, vViewSize);
     }
     
 #if !defined(PGE_USE_CUSTOM_START)
-    olc::rcode PixelGameEngine::Start() {
-        if (platform->ApplicationStartUp() != olc::OK) return olc::FAIL;
+    koi::rcode PixelGameEngine::Start() {
+        if (platform->ApplicationStartUp() != koi::OK) return koi::FAIL;
         
         // Construct the window
-        if (platform->CreateWindowPane({ 30,30 }, vWindowSize, bFullScreen) != olc::OK) return olc::FAIL;
-        olc_UpdateWindowSize(vWindowSize.x, vWindowSize.y);
+        if (platform->CreateWindowPane({ 30,30 }, vWindowSize, bFullScreen) != koi::OK) return koi::FAIL;
+        koi_UpdateWindowSize(vWindowSize.x, vWindowSize.y);
         
         // Start the thread
         bAtomActive = true;
@@ -625,102 +592,47 @@ namespace olc {
         // Wait for thread to be exited
         t.join();
         
-        if (platform->ApplicationCleanUp() != olc::OK) return olc::FAIL;
+        if (platform->ApplicationCleanUp() != koi::OK) return koi::FAIL;
         
-        return olc::OK;
+        return koi::OK;
     }
 #endif
     
     
-    void PixelGameEngine::SetWindowOffset(const olc::Vector2f& offset) {
-        SetWindowOffset(offset.x, offset.y);
-    }
-    
-    void PixelGameEngine::SetWindowOffset(float x, float y) {
-        vOffset = { x, y };
-    }
-    
-    void PixelGameEngine::SetWindowScale(const olc::Vector2f& scale) {
-        SetWindowScale(scale.x, scale.y);
-    }
-    
-    void PixelGameEngine::SetWindowScale(float x, float y) {
-        vScale = { x, y };
-    }
-    
-    void PixelGameEngine::SetWindowTint(const olc::Pixel& t_tint) {
-        tint = t_tint;
-    }
-    
-    void PixelGameEngine::SetWindowCustomRenderFunction(std::function<void()> f) {
-        funcHook = f;
-    }
-    
+    void PixelGameEngine::SetWindowOffset(const koi::Vector2f& offset) { SetWindowOffset(offset.x, offset.y); }
+    void PixelGameEngine::SetWindowOffset(float x, float y) { vOffset = { x, y }; }
+    void PixelGameEngine::SetWindowScale(const koi::Vector2f& scale) { SetWindowScale(scale.x, scale.y); }
+    void PixelGameEngine::SetWindowScale(float x, float y) { vScale = { x, y }; }
+    void PixelGameEngine::SetWindowTint(const koi::Pixel& t_tint) { tint = t_tint; }
+    void PixelGameEngine::SetWindowCustomRenderFunction(std::function<void()> f) { funcHook = f; }
     
     Sprite* PixelGameEngine::GetDrawTarget() const { return pDrawTarget; }
-    
-    int32_t PixelGameEngine::GetDrawTargetWidth() const {
-        if (pDrawTarget)
-            return pDrawTarget->width;
-        else
-            return 0;
-    }
-    
-    int32_t PixelGameEngine::GetDrawTargetHeight() const {
-        if (pDrawTarget)
-            return pDrawTarget->height;
-        else
-            return 0;
-    }
+    int32_t PixelGameEngine::GetDrawTargetWidth() const { return pDrawTarget ? pDrawTarget->width : 0; }
+    int32_t PixelGameEngine::GetDrawTargetHeight() const { return pDrawTarget ? pDrawTarget->height : 0; }
     
     uint32_t PixelGameEngine::GetFPS() const { return nLastFPS; }
-    
     bool PixelGameEngine::IsFocused() const { return bHasInputFocus; }
-    
     HWButton PixelGameEngine::GetKey(Key k) const { return pKeyboardState[k]; }
-    
     HWButton PixelGameEngine::GetMouse(uint32_t b) const { return pMouseState[b]; }
-    
     int32_t PixelGameEngine::GetMouseX() const { return vMousePos.x; }
-    
     int32_t PixelGameEngine::GetMouseY() const { return vMousePos.y; }
-    
-    const olc::Vector2i& PixelGameEngine::GetMousePos() const { return vMousePos; }
-    
+    const koi::Vector2i& PixelGameEngine::GetMousePos() const { return vMousePos; }
     int32_t PixelGameEngine::GetMouseWheel() const { return nMouseWheelDelta; }
-    
     int32_t PixelGameEngine::ScreenWidth() const { return vScreenSize.x; }
-    
     int32_t PixelGameEngine::ScreenHeight() const { return vScreenSize.y; }
-    
     float PixelGameEngine::GetElapsedTime() const { return fLastElapsed; }
+    const koi::Vector2i& PixelGameEngine::GetWindowSize() const { return vWindowSize; }
+    const koi::Vector2i& PixelGameEngine::GetPixelSize() const { return vPixelSize; }
+    const koi::Vector2i& PixelGameEngine::GetScreenPixelSize() const { return vScreenPixelSize; }
+    const koi::Vector2i& PixelGameEngine::GetWindowMouse() const { return vMouseWindowPos; }
     
-    const olc::Vector2i& PixelGameEngine::GetWindowSize() const { return vWindowSize; }
-    
-    const olc::Vector2i& PixelGameEngine::GetPixelSize() const { return vPixelSize; }
-    
-    const olc::Vector2i& PixelGameEngine::GetScreenPixelSize() const { return vScreenPixelSize; }
-    
-    const olc::Vector2i& PixelGameEngine::GetWindowMouse() const { return vMouseWindowPos; }
-    
-    
-    bool PixelGameEngine::Draw(const olc::Vector2i& pos, Pixel p) {
-        return Draw(pos.x, pos.y, p);
-    }
+    bool PixelGameEngine::Draw(const koi::Vector2i& pos, Pixel p) { return Draw(pos.x, pos.y, p); }
     
     // This is it, the critical function that plots a pixel
     bool PixelGameEngine::Draw(int32_t x, int32_t y, Pixel p) {
         if (!pDrawTarget) return false;
-        
-        if (nPixelMode == Pixel::NORMAL) {
-            return pDrawTarget->SetPixel(x, y, p);
-        }
-        
-        if (nPixelMode == Pixel::MASK) {
-            if (p.a == 255)
-                return pDrawTarget->SetPixel(x, y, p);
-        }
-        
+        if (nPixelMode == Pixel::NORMAL) return pDrawTarget->SetPixel(x, y, p);
+        if (nPixelMode == Pixel::MASK) if (p.a == 255) return pDrawTarget->SetPixel(x, y, p);
         if (nPixelMode == Pixel::ALPHA) {
             Pixel d = pDrawTarget->GetPixel(x, y);
             float a = (float)(p.a / 255.0f) * fBlendFactor;
@@ -730,15 +642,9 @@ namespace olc {
             float b = a * (float)p.b + c * (float)d.b;
             return pDrawTarget->SetPixel(x, y, Pixel((uint8_t)r, (uint8_t)g, (uint8_t)b/*, (uint8_t)(p.a * fBlendFactor)*/));
         }
-        
-        if (nPixelMode == Pixel::CUSTOM) {
-            return pDrawTarget->SetPixel(x, y, funcPixelMode(x, y, p, pDrawTarget->GetPixel(x, y)));
-        }
-        
+        if (nPixelMode == Pixel::CUSTOM) return pDrawTarget->SetPixel(x, y, funcPixelMode(x, y, p, pDrawTarget->GetPixel(x, y)));
         return false;
     }
-    
-    
     
     void PixelGameEngine::Clear(Pixel p) {
         int pixels = GetDrawTargetWidth() * GetDrawTargetHeight();
@@ -746,16 +652,11 @@ namespace olc {
         for (int i = 0; i < pixels; i++) m[i] = p;
     }
     
-    void PixelGameEngine::ClearBuffer(Pixel p, bool bDepth) {
-        renderer->ClearBuffer(p, bDepth);
-    }
-    
-    
+    void PixelGameEngine::ClearBuffer(Pixel p, bool bDepth) { renderer->ClearBuffer(p, bDepth); }
     void PixelGameEngine::SetPixelMode(Pixel::Mode m) { nPixelMode = m; }
-    
     Pixel::Mode PixelGameEngine::GetPixelMode() { return nPixelMode; }
     
-    void PixelGameEngine::SetPixelMode(std::function<olc::Pixel(const int x, const int y, const olc::Pixel&, const olc::Pixel&)> pixelMode) {
+    void PixelGameEngine::SetPixelMode(std::function<koi::Pixel(const int x, const int y, const koi::Pixel&, const koi::Pixel&)> pixelMode) {
         funcPixelMode = pixelMode;
         nPixelMode = Pixel::Mode::CUSTOM;
     }
@@ -773,7 +674,7 @@ namespace olc {
     bool PixelGameEngine::OnUserUpdate(float fElapsedTime) { UNUSED(fElapsedTime);  return false; }
     bool PixelGameEngine::OnUserDestroy() { return true; }
     
-    void PixelGameEngine::olc_UpdateViewport() {
+    void PixelGameEngine::koi_UpdateViewport() {
         int32_t ww = vScreenSize.x * vPixelSize.x;
         int32_t wh = vScreenSize.y * vPixelSize.y;
         float wasp = (float)ww / (float)wh;
@@ -794,16 +695,14 @@ namespace olc {
         vViewPos = (vWindowSize - vViewSize) / 2;
     }
     
-    void PixelGameEngine::olc_UpdateWindowSize(int32_t x, int32_t y) {
+    void PixelGameEngine::koi_UpdateWindowSize(int32_t x, int32_t y) {
         vWindowSize = { x, y };
-        olc_UpdateViewport();
+        koi_UpdateViewport();
     }
     
-    void PixelGameEngine::olc_UpdateMouseWheel(int32_t delta) {
-        nMouseWheelDeltaCache += delta;
-    }
+    void PixelGameEngine::koi_UpdateMouseWheel(int32_t delta) { nMouseWheelDeltaCache += delta; }
     
-    void PixelGameEngine::olc_UpdateMouse(int32_t x, int32_t y) {
+    void PixelGameEngine::koi_UpdateMouse(int32_t x, int32_t y) {
         // Mouse coords come in screen space
         // But leave in pixel space
         bHasMouseFocus = true;
@@ -819,30 +718,26 @@ namespace olc {
         if (vMousePosCache.y < 0) vMousePosCache.y = 0;
     }
     
-    void PixelGameEngine::olc_UpdateMouseState(int32_t button, bool state) { pMouseNewState[button] = state; }
-    
-    void PixelGameEngine::olc_UpdateKeyState(int32_t key, bool state) { pKeyNewState[key] = state; }
-    
-    void PixelGameEngine::olc_UpdateMouseFocus(bool state) { bHasMouseFocus = state; }
-    
-    void PixelGameEngine::olc_UpdateKeyFocus(bool state) { bHasInputFocus = state; }
-    
-    void PixelGameEngine::olc_Terminate() { bAtomActive = false; }
+    void PixelGameEngine::koi_UpdateMouseState(int32_t button, bool state) { pMouseNewState[button] = state; }
+    void PixelGameEngine::koi_UpdateKeyState(int32_t key, bool state) { pKeyNewState[key] = state; }
+    void PixelGameEngine::koi_UpdateMouseFocus(bool state) { bHasMouseFocus = state; }
+    void PixelGameEngine::koi_UpdateKeyFocus(bool state) { bHasInputFocus = state; }
+    void PixelGameEngine::koi_Terminate() { bAtomActive = false; }
     
     void PixelGameEngine::EngineThread() {
         // Allow platform to do stuff here if needed, since its now in the
         // context of this thread
-        if (platform->ThreadStartUp() == olc::FAIL) return;
+        if (platform->ThreadStartUp() == koi::FAIL) return;
         
         // Do engine context specific initialisation
-        olc_PrepareEngine();
+        koi_PrepareEngine();
         
         // Create user resources as part of this thread
         if (!OnUserCreate()) bAtomActive = false;
         
         while (bAtomActive) {
             // Run as fast as possible
-            while (bAtomActive) { olc_CoreUpdate(); }
+            while (bAtomActive) { koi_CoreUpdate(); }
             
             // Allow the user to free resources if they have overrided the destroy function
             if (!OnUserDestroy()) {
@@ -854,13 +749,13 @@ namespace olc {
         platform->ThreadCleanUp();
     }
     
-    void PixelGameEngine::olc_PrepareEngine() {
+    void PixelGameEngine::koi_PrepareEngine() {
         // Start OpenGL, the context is owned by the game thread
-        if (platform->CreateGraphics(bFullScreen, bEnableVSYNC, vViewPos, vViewSize) == olc::FAIL) return;
+        if (platform->CreateGraphics(bFullScreen, bEnableVSYNC, vViewPos, vViewSize) == koi::FAIL) return;
         
         
         // Create Primary window "0"
-        pDrawTarget = new olc::Sprite(vScreenSize.x, vScreenSize.y);
+        pDrawTarget = new koi::Sprite(vScreenSize.x, vScreenSize.y);
         nResID = renderer->CreateTexture(vScreenSize.x, vScreenSize.y);
         renderer->UpdateTexture(nResID, pDrawTarget);
         
@@ -871,7 +766,7 @@ namespace olc {
     }
     
     
-    void PixelGameEngine::olc_CoreUpdate() {
+    void PixelGameEngine::koi_CoreUpdate() {
         // Handle Timing
         m_tp2 = std::chrono::system_clock::now();
         std::chrono::duration<float> elapsedTime = m_tp2 - m_tp1;
@@ -910,7 +805,7 @@ namespace olc {
         nMouseWheelDelta = nMouseWheelDeltaCache;
         nMouseWheelDeltaCache = 0;
         
-        //  renderer->ClearBuffer(olc::BLACK, true);
+        // renderer->ClearBuffer(koi::BLACK, true);
         
         // Handle Frame Update
         if (!OnUserUpdate(fElapsedTime))
@@ -918,7 +813,7 @@ namespace olc {
         
         // Display Frame
         renderer->UpdateViewport(vViewPos, vViewSize);
-        renderer->ClearBuffer(olc::BLACK, true);
+        renderer->ClearBuffer(koi::BLACK, true);
         
         renderer->PrepareDrawing();
         
@@ -942,7 +837,7 @@ namespace olc {
         if (fFrameTimer >= 1.0f) {
             nLastFPS = nFrameCount;
             fFrameTimer -= 1.0f;
-            std::string sTitle = "OneLoneCoder.com - Pixel Game Engine - " + sAppName + " - FPS: " + std::to_string(nFrameCount);
+            std::string sTitle = sAppName + " - FPS: " + std::to_string(nFrameCount);
             platform->SetWindowTitle(sTitle);
             nFrameCount = 0;
         }
@@ -951,20 +846,20 @@ namespace olc {
     // Need a couple of statics as these are singleton instances
     // read from multiple locations
     std::atomic<bool> PixelGameEngine::bAtomActive{ false };
-    olc::PixelGameEngine* olc::Platform::ptrPGE = nullptr;
-    olc::PixelGameEngine* olc::Renderer::ptrPGE = nullptr;
+    koi::PixelGameEngine* koi::Platform::ptrPGE = nullptr;
+    koi::PixelGameEngine* koi::Renderer::ptrPGE = nullptr;
 };
 
 // MARK: Platform Specifics;
 // +------------------------------------------------------------------------------+
-// | olcPixelGameEngine PLATFORM SPECIFIC IMPLEMENTATIONS                         |
+// | koiPixelGameEngine PLATFORM SPECIFIC IMPLEMENTATIONS                         |
 // +------------------------------------------------------------------------------+
 
 // MARK: Renderer OpenGL 1.0
 // +------------------------------------------------------------------------------+
 // | START RENDERER: OpenGL 1.0 (the original, the best...)                       |
 // +------------------------------------------------------------------------------+
-#if defined(OLC_GFX_OPENGL10)
+#if defined(KOI_GFX_OPENGL10)
 #if defined(_WIN32)
 #include <windows.h>
 #include <dwmapi.h>
@@ -998,8 +893,8 @@ typedef X11::GLXContext glRenderContext_t;
 #include <OpenGL/glu.h>
 #endif
 
-namespace olc {
-    class Renderer_OGL10 : public olc::Renderer {
+namespace koi {
+    class Renderer_OGL10 : public koi::Renderer {
     private:
 #if defined(__APPLE__)
         bool mFullScreen = false;
@@ -1011,9 +906,9 @@ namespace olc {
         bool bSync = false;
         
 #if defined(__linux__) || defined(__FreeBSD__)
-        X11::Display* olc_Display = nullptr;
-        X11::Window* olc_Window = nullptr;
-        X11::XVisualInfo* olc_VisualInfo = nullptr;
+        X11::Display* koi_Display = nullptr;
+        X11::Window* koi_Window = nullptr;
+        X11::XVisualInfo* koi_VisualInfo = nullptr;
 #endif
         
     public:
@@ -1037,7 +932,7 @@ namespace olc {
 #endif
         }
         
-        olc::rcode CreateDevice(std::vector<void*> params, bool bFullScreen, bool bVSYNC) override {
+        koi::rcode CreateDevice(std::vector<void*> params, bool bFullScreen, bool bVSYNC) override {
 #if defined(_WIN32)
             // Create Device Context
             glDeviceContext = GetDC((HWND)(params[0]));
@@ -1050,10 +945,10 @@ namespace olc {
             };
             
             int pf = 0;
-            if (!(pf = ChoosePixelFormat(glDeviceContext, &pfd))) return olc::FAIL;
+            if (!(pf = ChoosePixelFormat(glDeviceContext, &pfd))) return koi::FAIL;
             SetPixelFormat(glDeviceContext, pf, &pfd);
             
-            if (!(glRenderContext = wglCreateContext(glDeviceContext))) return olc::FAIL;
+            if (!(glRenderContext = wglCreateContext(glDeviceContext))) return koi::FAIL;
             wglMakeCurrent(glDeviceContext, glRenderContext);
             
             // Remove Frame cap
@@ -1066,15 +961,15 @@ namespace olc {
             using namespace X11;
             // Linux has tighter coupling between OpenGL and X11, so we store
             // various "platform" handles in the renderer
-            olc_Display = (X11::Display*)(params[0]);
-            olc_Window = (X11::Window*)(params[1]);
-            olc_VisualInfo = (X11::XVisualInfo*)(params[2]);
+            koi_Display = (X11::Display*)(params[0]);
+            koi_Window = (X11::Window*)(params[1]);
+            koi_VisualInfo = (X11::XVisualInfo*)(params[2]);
             
-            glDeviceContext = glXCreateContext(olc_Display, olc_VisualInfo, nullptr, GL_TRUE);
-            glXMakeCurrent(olc_Display, *olc_Window, glDeviceContext);
+            glDeviceContext = glXCreateContext(koi_Display, koi_VisualInfo, nullptr, GL_TRUE);
+            glXMakeCurrent(koi_Display, *koi_Window, glDeviceContext);
             
             XWindowAttributes gwa;
-            XGetWindowAttributes(olc_Display, *olc_Window, &gwa);
+            XGetWindowAttributes(koi_Display, *koi_Window, &gwa);
             glViewport(0, 0, gwa.width, gwa.height);
             
             glSwapIntervalEXT = nullptr;
@@ -1088,7 +983,7 @@ namespace olc {
             }
             
             if (glSwapIntervalEXT != nullptr && !bVSYNC)
-                glSwapIntervalEXT(olc_Display, *olc_Window, 0);
+                glSwapIntervalEXT(koi_Display, *koi_Window, 0);
 #endif
             
 #if defined(__APPLE__)
@@ -1103,23 +998,23 @@ namespace olc {
             glEnable(GL_TEXTURE_2D); // Turn on texturing
             glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 #endif
-            return olc::rcode::OK;
+            return koi::rcode::OK;
         }
         
-        olc::rcode DestroyDevice() override {
+        koi::rcode DestroyDevice() override {
 #if defined(_WIN32)
             wglDeleteContext(glRenderContext);
 #endif
             
 #if defined(__linux__) || defined(__FreeBSD__)
-            glXMakeCurrent(olc_Display, None, NULL);
-            glXDestroyContext(olc_Display, glDeviceContext);
+            glXMakeCurrent(koi_Display, None, NULL);
+            glXDestroyContext(koi_Display, glDeviceContext);
 #endif
             
 #if defined(__APPLE__)
             glutDestroyWindow(glutGetWindow());
 #endif
-            return olc::rcode::OK;
+            return koi::rcode::OK;
         }
         
         void DisplayFrame() override {
@@ -1129,7 +1024,7 @@ namespace olc {
 #endif
             
 #if defined(__linux__) || defined(__FreeBSD__)
-            X11::glXSwapBuffers(olc_Display, *olc_Window);
+            X11::glXSwapBuffers(koi_Display, *koi_Window);
 #endif
             
 #if defined(__APPLE__)
@@ -1142,7 +1037,7 @@ namespace olc {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         }
         
-        void DrawWindowQuad(const olc::Vector2f& offset, const olc::Vector2f& scale, const olc::Pixel tint) override {
+        void DrawWindowQuad(const koi::Vector2f& offset, const koi::Vector2f& scale, const koi::Pixel tint) override {
             glBegin(GL_QUADS);
             glColor4ub(tint.r, tint.g, tint.b, tint.a);
             glTexCoord2f(0.0f * scale.x + offset.x, 1.0f * scale.y + offset.y);
@@ -1175,7 +1070,7 @@ namespace olc {
             return id;
         }
         
-        void UpdateTexture(uint32_t id, olc::Sprite* spr) override {
+        void UpdateTexture(uint32_t id, koi::Sprite* spr) override {
             UNUSED(id);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, spr->width, spr->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, spr->GetData());
         }
@@ -1184,13 +1079,13 @@ namespace olc {
             glBindTexture(GL_TEXTURE_2D, id);
         }
         
-        void ClearBuffer(olc::Pixel p, bool bDepth) override {
+        void ClearBuffer(koi::Pixel p, bool bDepth) override {
             glClearColor(float(p.r) / 255.0f, float(p.g) / 255.0f, float(p.b) / 255.0f, float(p.a) / 255.0f);
             glClear(GL_COLOR_BUFFER_BIT);
             if (bDepth) glClear(GL_DEPTH_BUFFER_BIT);
         }
         
-        void UpdateViewport(const olc::Vector2i& pos, const olc::Vector2i& size) override {
+        void UpdateViewport(const koi::Vector2i& pos, const koi::Vector2i& size) override {
 #if defined(__APPLE__)
             if (!mFullScreen) glutReshapeWindow(size.x, size.y);
 #else
@@ -1233,10 +1128,10 @@ namespace olc {
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-namespace olc {
-    class Platform_Windows : public olc::Platform {
+namespace koi {
+    class Platform_Windows : public koi::Platform {
     private:
-        HWND olc_hWnd = nullptr;
+        HWND koi_hWnd = nullptr;
         std::wstring wsAppName;
         
         std::wstring ConvertS2W(std::string s) {
@@ -1255,52 +1150,52 @@ namespace olc {
         }
         
     public:
-        virtual olc::rcode ApplicationStartUp() override { return olc::rcode::OK; }
-        virtual olc::rcode ApplicationCleanUp() override { return olc::rcode::OK; }
-        virtual olc::rcode ThreadStartUp() override { return olc::rcode::OK; }
+        virtual koi::rcode ApplicationStartUp() override { return koi::rcode::OK; }
+        virtual koi::rcode ApplicationCleanUp() override { return koi::rcode::OK; }
+        virtual koi::rcode ThreadStartUp() override { return koi::rcode::OK; }
         
-        virtual olc::rcode ThreadCleanUp() override {
+        virtual koi::rcode ThreadCleanUp() override {
             renderer->DestroyDevice();
-            PostMessage(olc_hWnd, WM_DESTROY, 0, 0);
-            return olc::OK;
+            PostMessage(koi_hWnd, WM_DESTROY, 0, 0);
+            return koi::OK;
         }
         
-        virtual olc::rcode CreateGraphics(bool bFullScreen, bool bEnableVSYNC, const olc::Vector2i& vViewPos, const olc::Vector2i& vViewSize) override {
-            if (renderer->CreateDevice({ olc_hWnd }, bFullScreen, bEnableVSYNC) == olc::rcode::OK) {
+        virtual koi::rcode CreateGraphics(bool bFullScreen, bool bEnableVSYNC, const koi::Vector2i& vViewPos, const koi::Vector2i& vViewSize) override {
+            if (renderer->CreateDevice({ koi_hWnd }, bFullScreen, bEnableVSYNC) == koi::rcode::OK) {
                 renderer->UpdateViewport(vViewPos, vViewSize);
-                return olc::rcode::OK;
+                return koi::rcode::OK;
             } else {
-                return olc::rcode::FAIL;
+                return koi::rcode::FAIL;
             }
         }
         
-        virtual olc::rcode CreateWindowPane(const olc::Vector2i& vWindowPos, olc::Vector2i& vWindowSize, bool bFullScreen) override {
+        virtual koi::rcode CreateWindowPane(const koi::Vector2i& vWindowPos, koi::Vector2i& vWindowSize, bool bFullScreen) override {
             WNDCLASS wc;
             wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
             wc.hCursor = LoadCursor(NULL, IDC_ARROW);
             wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
             wc.hInstance = GetModuleHandle(nullptr);
-            wc.lpfnWndProc = olc_WindowEvent;
+            wc.lpfnWndProc = koi_WindowEvent;
             wc.cbClsExtra = 0;
             wc.cbWndExtra = 0;
             wc.lpszMenuName = nullptr;
             wc.hbrBackground = nullptr;
-            wc.lpszClassName = olcT("OLC_PIXEL_GAME_ENGINE");
+            wc.lpszClassName = koiT("KOI_PIXEL_GAME_ENGINE");
             RegisterClass(&wc);
             
             // Define window furniture
             DWORD dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
             DWORD dwStyle = WS_CAPTION | WS_SYSMENU | WS_VISIBLE | WS_THICKFRAME;
             
-            olc::Vector2i vTopLeft = vWindowPos;
+            koi::Vector2i vTopLeft = vWindowPos;
             
             // Handle Fullscreen
             if (bFullScreen) {
                 dwExStyle = 0;
                 dwStyle = WS_VISIBLE | WS_POPUP;
-                HMONITOR hmon = MonitorFromWindow(olc_hWnd, MONITOR_DEFAULTTONEAREST);
+                HMONITOR hmon = MonitorFromWindow(koi_hWnd, MONITOR_DEFAULTTONEAREST);
                 MONITORINFO mi = { sizeof(mi) };
-                if (!GetMonitorInfo(hmon, &mi)) return olc::rcode::FAIL;
+                if (!GetMonitorInfo(hmon, &mi)) return koi::rcode::FAIL;
                 vWindowSize = { mi.rcMonitor.right, mi.rcMonitor.bottom };
                 vTopLeft.x = 0;
                 vTopLeft.y = 0;
@@ -1312,7 +1207,7 @@ namespace olc {
             int width = rWndRect.right - rWndRect.left;
             int height = rWndRect.bottom - rWndRect.top;
             
-            olc_hWnd = CreateWindowEx(dwExStyle, olcT("OLC_PIXEL_GAME_ENGINE"), olcT(""), dwStyle,
+            koi_hWnd = CreateWindowEx(dwExStyle, koiT("KOI_PIXEL_GAME_ENGINE"), koiT(""), dwStyle,
                                       vTopLeft.x, vTopLeft.y, width, height, NULL, NULL, GetModuleHandle(nullptr), this);
             
             // Create Keyboard Mapping
@@ -1343,53 +1238,53 @@ namespace olc {
             mapKeys[VK_NUMPAD0] = Key::NP0; mapKeys[VK_NUMPAD1] = Key::NP1; mapKeys[VK_NUMPAD2] = Key::NP2; mapKeys[VK_NUMPAD3] = Key::NP3; mapKeys[VK_NUMPAD4] = Key::NP4;
             mapKeys[VK_NUMPAD5] = Key::NP5; mapKeys[VK_NUMPAD6] = Key::NP6; mapKeys[VK_NUMPAD7] = Key::NP7; mapKeys[VK_NUMPAD8] = Key::NP8; mapKeys[VK_NUMPAD9] = Key::NP9;
             mapKeys[VK_MULTIPLY] = Key::NP_MUL; mapKeys[VK_ADD] = Key::NP_ADD; mapKeys[VK_DIVIDE] = Key::NP_DIV; mapKeys[VK_SUBTRACT] = Key::NP_SUB; mapKeys[VK_DECIMAL] = Key::NP_DECIMAL;
-            return olc::OK;
+            return koi::OK;
         }
         
-        virtual olc::rcode SetWindowTitle(const std::string& s) override {
+        virtual koi::rcode SetWindowTitle(const std::string& s) override {
 #ifdef UNICODE
-            SetWindowText(olc_hWnd, ConvertS2W(s).c_str());
+            SetWindowText(koi_hWnd, ConvertS2W(s).c_str());
 #else
-            SetWindowText(olc_hWnd, s.c_str());
+            SetWindowText(koi_hWnd, s.c_str());
 #endif
-            return olc::OK;
+            return koi::OK;
         }
         
-        virtual olc::rcode StartSystemEventLoop() override {
+        virtual koi::rcode StartSystemEventLoop() override {
             MSG msg;
             while (GetMessage(&msg, NULL, 0, 0) > 0) {
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
             }
-            return olc::OK;
+            return koi::OK;
         }
         
-        virtual olc::rcode HandleSystemEvent() override { return olc::rcode::FAIL; }
+        virtual koi::rcode HandleSystemEvent() override { return koi::rcode::FAIL; }
         
         // Windows Event Handler - this is statically connected to the windows event system
-        static LRESULT CALLBACK olc_WindowEvent(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+        static LRESULT CALLBACK koi_WindowEvent(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             switch (uMsg) {
                 case WM_MOUSEMOVE: {
                     // Thanks @ForAbby (Discord)
                     uint16_t x = lParam & 0xFFFF; uint16_t y = (lParam >> 16) & 0xFFFF;
                     int16_t ix = *(int16_t*)&x;   int16_t iy = *(int16_t*)&y;
-                    ptrPGE->olc_UpdateMouse(ix, iy);
+                    ptrPGE->koi_UpdateMouse(ix, iy);
                     return 0;
                 }
-                case WM_SIZE:       ptrPGE->olc_UpdateWindowSize(lParam & 0xFFFF, (lParam >> 16) & 0xFFFF); return 0;
-                case WM_MOUSEWHEEL: ptrPGE->olc_UpdateMouseWheel(GET_WHEEL_DELTA_WPARAM(wParam));           return 0;
-                case WM_MOUSELEAVE: ptrPGE->olc_UpdateMouseFocus(false);                                    return 0;
-                case WM_SETFOCUS: ptrPGE->olc_UpdateKeyFocus(true);                                       return 0;
-                case WM_KILLFOCUS:  ptrPGE->olc_UpdateKeyFocus(false);                                      return 0;
-                case WM_KEYDOWN:  ptrPGE->olc_UpdateKeyState(mapKeys[wParam], true);                      return 0;
-                case WM_KEYUP:    ptrPGE->olc_UpdateKeyState(mapKeys[wParam], false);                     return 0;
-                case WM_LBUTTONDOWN:ptrPGE->olc_UpdateMouseState(0, true);                                  return 0;
-                case WM_LBUTTONUP:  ptrPGE->olc_UpdateMouseState(0, false);                                 return 0;
-                case WM_RBUTTONDOWN:ptrPGE->olc_UpdateMouseState(1, true);                                  return 0;
-                case WM_RBUTTONUP:  ptrPGE->olc_UpdateMouseState(1, false);                                 return 0;
-                case WM_MBUTTONDOWN:ptrPGE->olc_UpdateMouseState(2, true);                                  return 0;
-                case WM_MBUTTONUP:  ptrPGE->olc_UpdateMouseState(2, false);                                 return 0;
-                case WM_CLOSE:    ptrPGE->olc_Terminate();                                                return 0;
+                case WM_SIZE:       ptrPGE->koi_UpdateWindowSize(lParam & 0xFFFF, (lParam >> 16) & 0xFFFF); return 0;
+                case WM_MOUSEWHEEL: ptrPGE->koi_UpdateMouseWheel(GET_WHEEL_DELTA_WPARAM(wParam));           return 0;
+                case WM_MOUSELEAVE: ptrPGE->koi_UpdateMouseFocus(false);                                    return 0;
+                case WM_SETFOCUS: ptrPGE->koi_UpdateKeyFocus(true);                                       return 0;
+                case WM_KILLFOCUS:  ptrPGE->koi_UpdateKeyFocus(false);                                      return 0;
+                case WM_KEYDOWN:  ptrPGE->koi_UpdateKeyState(mapKeys[wParam], true);                      return 0;
+                case WM_KEYUP:    ptrPGE->koi_UpdateKeyState(mapKeys[wParam], false);                     return 0;
+                case WM_LBUTTONDOWN:ptrPGE->koi_UpdateMouseState(0, true);                                  return 0;
+                case WM_LBUTTONUP:  ptrPGE->koi_UpdateMouseState(0, false);                                 return 0;
+                case WM_RBUTTONDOWN:ptrPGE->koi_UpdateMouseState(1, true);                                  return 0;
+                case WM_RBUTTONUP:  ptrPGE->koi_UpdateMouseState(1, false);                                 return 0;
+                case WM_MBUTTONDOWN:ptrPGE->koi_UpdateMouseState(2, true);                                  return 0;
+                case WM_MBUTTONUP:  ptrPGE->koi_UpdateMouseState(2, false);                                 return 0;
+                case WM_CLOSE:    ptrPGE->koi_Terminate();                                                return 0;
                 case WM_DESTROY:  PostQuitMessage(0); DestroyWindow(hWnd);                return 0;
             }
             return DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -1409,87 +1304,87 @@ namespace olc {
 // | START PLATFORM: LINUX                                                        |
 // +------------------------------------------------------------------------------+
 #if defined(__linux__) || defined(__FreeBSD__)
-namespace olc {
-    class Platform_Linux : public olc::Platform {
+namespace koi {
+    class Platform_Linux : public koi::Platform {
     private:
-        X11::Display* olc_Display = nullptr;
-        X11::Window          olc_WindowRoot;
-        X11::Window          olc_Window;
-        X11::XVisualInfo* olc_VisualInfo;
-        X11::Colormap                olc_ColourMap;
-        X11::XSetWindowAttributes    olc_SetWindowAttribs;
+        X11::Display* koi_Display = nullptr;
+        X11::Window          koi_WindowRoot;
+        X11::Window          koi_Window;
+        X11::XVisualInfo* koi_VisualInfo;
+        X11::Colormap                koi_ColourMap;
+        X11::XSetWindowAttributes    koi_SetWindowAttribs;
         
     public:
-        virtual olc::rcode ApplicationStartUp() override { return olc::rcode::OK; }
+        virtual koi::rcode ApplicationStartUp() override { return koi::rcode::OK; }
         
-        virtual olc::rcode ApplicationCleanUp() override { return olc::rcode::OK; }
+        virtual koi::rcode ApplicationCleanUp() override { return koi::rcode::OK; }
         
-        virtual olc::rcode ThreadStartUp() override { return olc::rcode::OK; }
+        virtual koi::rcode ThreadStartUp() override { return koi::rcode::OK; }
         
-        virtual olc::rcode ThreadCleanUp() override {
+        virtual koi::rcode ThreadCleanUp() override {
             renderer->DestroyDevice();
-            return olc::OK;
+            return koi::OK;
         }
         
-        virtual olc::rcode CreateGraphics(bool bFullScreen, bool bEnableVSYNC, const olc::Vector2i& vViewPos, const olc::Vector2i& vViewSize) override {
-            if (renderer->CreateDevice({ olc_Display, &olc_Window, olc_VisualInfo }, bFullScreen, bEnableVSYNC) == olc::rcode::OK) {
+        virtual koi::rcode CreateGraphics(bool bFullScreen, bool bEnableVSYNC, const koi::Vector2i& vViewPos, const koi::Vector2i& vViewSize) override {
+            if (renderer->CreateDevice({ koi_Display, &koi_Window, koi_VisualInfo }, bFullScreen, bEnableVSYNC) == koi::rcode::OK) {
                 renderer->UpdateViewport(vViewPos, vViewSize);
-                return olc::rcode::OK;
+                return koi::rcode::OK;
             } else {
-                return olc::rcode::FAIL;
+                return koi::rcode::FAIL;
             }
         }
         
-        virtual olc::rcode CreateWindowPane(const olc::Vector2i& vWindowPos, olc::Vector2i& vWindowSize, bool bFullScreen) override {
+        virtual koi::rcode CreateWindowPane(const koi::Vector2i& vWindowPos, koi::Vector2i& vWindowSize, bool bFullScreen) override {
             using namespace X11;
             XInitThreads();
             
             // Grab the deafult display and window
-            olc_Display = XOpenDisplay(NULL);
-            olc_WindowRoot = DefaultRootWindow(olc_Display);
+            koi_Display = XOpenDisplay(NULL);
+            koi_WindowRoot = DefaultRootWindow(koi_Display);
             
             // Based on the display capabilities, configure the appearance of the window
-            GLint olc_GLAttribs[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };
-            olc_VisualInfo = glXChooseVisual(olc_Display, 0, olc_GLAttribs);
-            olc_ColourMap = XCreateColormap(olc_Display, olc_WindowRoot, olc_VisualInfo->visual, AllocNone);
-            olc_SetWindowAttribs.colormap = olc_ColourMap;
+            GLint koi_GLAttribs[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };
+            koi_VisualInfo = glXChooseVisual(koi_Display, 0, koi_GLAttribs);
+            koi_ColourMap = XCreateColormap(koi_Display, koi_WindowRoot, koi_VisualInfo->visual, AllocNone);
+            koi_SetWindowAttribs.colormap = koi_ColourMap;
             
             // Register which events we are interested in receiving
-            olc_SetWindowAttribs.event_mask = ExposureMask | KeyPressMask | KeyReleaseMask |
+            koi_SetWindowAttribs.event_mask = ExposureMask | KeyPressMask | KeyReleaseMask |
             ButtonPressMask | ButtonReleaseMask | PointerMotionMask | FocusChangeMask | StructureNotifyMask;
             
             // Create the window
-            olc_Window = XCreateWindow(olc_Display, olc_WindowRoot, vWindowPos.x, vWindowPos.y,
+            koi_Window = XCreateWindow(koi_Display, koi_WindowRoot, vWindowPos.x, vWindowPos.y,
                                        vWindowSize.x, vWindowSize.y,
-                                       0, olc_VisualInfo->depth, InputOutput, olc_VisualInfo->visual,
-                                       CWColormap | CWEventMask, &olc_SetWindowAttribs);
+                                       0, koi_VisualInfo->depth, InputOutput, koi_VisualInfo->visual,
+                                       CWColormap | CWEventMask, &koi_SetWindowAttribs);
             
-            Atom wmDelete = XInternAtom(olc_Display, "WM_DELETE_WINDOW", true);
-            XSetWMProtocols(olc_Display, olc_Window, &wmDelete, 1);
+            Atom wmDelete = XInternAtom(koi_Display, "WM_DELETE_WINDOW", true);
+            XSetWMProtocols(koi_Display, koi_Window, &wmDelete, 1);
             
-            XMapWindow(olc_Display, olc_Window);
-            XStoreName(olc_Display, olc_Window, "OneLoneCoder.com - Pixel Game Engine");
+            XMapWindow(koi_Display, koi_Window);
+            XStoreName(koi_Display, koi_Window, "OneLoneCoder.com - Pixel Game Engine");
             
             if (bFullScreen) { // Thanks DragonEye, again :D
                 Atom wm_state;
                 Atom fullscreen;
-                wm_state = XInternAtom(olc_Display, "_NET_WM_STATE", False);
-                fullscreen = XInternAtom(olc_Display, "_NET_WM_STATE_FULLSCREEN", False);
+                wm_state = XInternAtom(koi_Display, "_NET_WM_STATE", False);
+                fullscreen = XInternAtom(koi_Display, "_NET_WM_STATE_FULLSCREEN", False);
                 XEvent xev{ 0 };
                 xev.type = ClientMessage;
-                xev.xclient.window = olc_Window;
+                xev.xclient.window = koi_Window;
                 xev.xclient.message_type = wm_state;
                 xev.xclient.format = 32;
                 xev.xclient.data.l[0] = (bFullScreen ? 1 : 0);   // the action (0: off, 1: on, 2: toggle)
                 xev.xclient.data.l[1] = fullscreen;             // first property to alter
                 xev.xclient.data.l[2] = 0;                      // second property to alter
                 xev.xclient.data.l[3] = 0;                      // source indication
-                XMapWindow(olc_Display, olc_Window);
-                XSendEvent(olc_Display, DefaultRootWindow(olc_Display), False,
+                XMapWindow(koi_Display, koi_Window);
+                XSendEvent(koi_Display, DefaultRootWindow(koi_Display), False,
                            SubstructureRedirectMask | SubstructureNotifyMask, &xev);
-                XFlush(olc_Display);
+                XFlush(koi_Display);
                 XWindowAttributes gwa;
-                XGetWindowAttributes(olc_Display, olc_Window, &gwa);
+                XGetWindowAttributes(koi_Display, koi_Window, &gwa);
                 vWindowSize.x = gwa.width;
                 vWindowSize.y = gwa.height;
             }
@@ -1523,70 +1418,70 @@ namespace olc {
             mapKeys[XK_KP_5] = Key::NP5; mapKeys[XK_KP_6] = Key::NP6; mapKeys[XK_KP_7] = Key::NP7; mapKeys[XK_KP_8] = Key::NP8; mapKeys[XK_KP_9] = Key::NP9;
             mapKeys[XK_KP_Multiply] = Key::NP_MUL; mapKeys[XK_KP_Add] = Key::NP_ADD; mapKeys[XK_KP_Divide] = Key::NP_DIV; mapKeys[XK_KP_Subtract] = Key::NP_SUB; mapKeys[XK_KP_Decimal] = Key::NP_DECIMAL;
             
-            return olc::OK;
+            return koi::OK;
         }
         
-        virtual olc::rcode SetWindowTitle(const std::string& s) override {
-            X11::XStoreName(olc_Display, olc_Window, s.c_str());
-            return olc::OK;
+        virtual koi::rcode SetWindowTitle(const std::string& s) override {
+            X11::XStoreName(koi_Display, koi_Window, s.c_str());
+            return koi::OK;
         }
         
-        virtual olc::rcode StartSystemEventLoop() override { return olc::OK; }
+        virtual koi::rcode StartSystemEventLoop() override { return koi::OK; }
         
-        virtual olc::rcode HandleSystemEvent() override {
+        virtual koi::rcode HandleSystemEvent() override {
             using namespace X11;
             // Handle Xlib Message Loop - we do this in the
             // same thread that OpenGL was created so we dont
             // need to worry too much about multithreading with X11
             XEvent xev;
-            while (XPending(olc_Display)) {
-                XNextEvent(olc_Display, &xev);
+            while (XPending(koi_Display)) {
+                XNextEvent(koi_Display, &xev);
                 if (xev.type == Expose) {
                     XWindowAttributes gwa;
-                    XGetWindowAttributes(olc_Display, olc_Window, &gwa);
-                    ptrPGE->olc_UpdateWindowSize(gwa.width, gwa.height);
+                    XGetWindowAttributes(koi_Display, koi_Window, &gwa);
+                    ptrPGE->koi_UpdateWindowSize(gwa.width, gwa.height);
                 } else if (xev.type == ConfigureNotify) {
                     XConfigureEvent xce = xev.xconfigure;
-                    ptrPGE->olc_UpdateWindowSize(xce.width, xce.height);
+                    ptrPGE->koi_UpdateWindowSize(xce.width, xce.height);
                 } else if (xev.type == KeyPress) {
                     KeySym sym = XLookupKeysym(&xev.xkey, 0);
-                    ptrPGE->olc_UpdateKeyState(mapKeys[sym], true);
+                    ptrPGE->koi_UpdateKeyState(mapKeys[sym], true);
                     XKeyEvent* e = (XKeyEvent*)&xev; // Because DragonEye loves numpads
                     XLookupString(e, NULL, 0, &sym, NULL);
-                    ptrPGE->olc_UpdateKeyState(mapKeys[sym], true);
+                    ptrPGE->koi_UpdateKeyState(mapKeys[sym], true);
                 } else if (xev.type == KeyRelease) {
                     KeySym sym = XLookupKeysym(&xev.xkey, 0);
-                    ptrPGE->olc_UpdateKeyState(mapKeys[sym], false);
+                    ptrPGE->koi_UpdateKeyState(mapKeys[sym], false);
                     XKeyEvent* e = (XKeyEvent*)&xev;
                     XLookupString(e, NULL, 0, &sym, NULL);
-                    ptrPGE->olc_UpdateKeyState(mapKeys[sym], false);
+                    ptrPGE->koi_UpdateKeyState(mapKeys[sym], false);
                 } else if (xev.type == ButtonPress) {
                     switch (xev.xbutton.button) {
-                        case 1: ptrPGE->olc_UpdateMouseState(0, true); break;
-                        case 2: ptrPGE->olc_UpdateMouseState(2, true); break;
-                        case 3: ptrPGE->olc_UpdateMouseState(1, true); break;
-                        case 4: ptrPGE->olc_UpdateMouseWheel(120); break;
-                        case 5: ptrPGE->olc_UpdateMouseWheel(-120); break;
+                        case 1: ptrPGE->koi_UpdateMouseState(0, true); break;
+                        case 2: ptrPGE->koi_UpdateMouseState(2, true); break;
+                        case 3: ptrPGE->koi_UpdateMouseState(1, true); break;
+                        case 4: ptrPGE->koi_UpdateMouseWheel(120); break;
+                        case 5: ptrPGE->koi_UpdateMouseWheel(-120); break;
                         default: break;
                     }
                 } else if (xev.type == ButtonRelease) {
                     switch (xev.xbutton.button) {
-                        case 1: ptrPGE->olc_UpdateMouseState(0, false); break;
-                        case 2: ptrPGE->olc_UpdateMouseState(2, false); break;
-                        case 3: ptrPGE->olc_UpdateMouseState(1, false); break;
+                        case 1: ptrPGE->koi_UpdateMouseState(0, false); break;
+                        case 2: ptrPGE->koi_UpdateMouseState(2, false); break;
+                        case 3: ptrPGE->koi_UpdateMouseState(1, false); break;
                         default: break;
                     }
                 } else if (xev.type == MotionNotify) {
-                    ptrPGE->olc_UpdateMouse(xev.xmotion.x, xev.xmotion.y);
+                    ptrPGE->koi_UpdateMouse(xev.xmotion.x, xev.xmotion.y);
                 } else if (xev.type == FocusIn) {
-                    ptrPGE->olc_UpdateKeyFocus(true);
+                    ptrPGE->koi_UpdateKeyFocus(true);
                 } else if (xev.type == FocusOut) {
-                    ptrPGE->olc_UpdateKeyFocus(false);
+                    ptrPGE->koi_UpdateKeyFocus(false);
                 } else if (xev.type == ClientMessage) {
-                    ptrPGE->olc_Terminate();
+                    ptrPGE->koi_Terminate();
                 }
             }
-            return olc::OK;
+            return koi::OK;
         }
     };
 }
@@ -1604,35 +1499,35 @@ namespace olc {
 // +------------------------------------------------------------------------------+
 //
 #if defined(__APPLE__)
-namespace olc {
+namespace koi {
     
-    class Platform_GLUT : public olc::Platform {
+    class Platform_GLUT : public koi::Platform {
     public:
         static std::atomic<bool>* bActiveRef;
         
-        virtual olc::rcode ApplicationStartUp() override {
-            return olc::rcode::OK;
+        virtual koi::rcode ApplicationStartUp() override {
+            return koi::rcode::OK;
         }
         
-        virtual olc::rcode ApplicationCleanUp() override {
-            return olc::rcode::OK;
+        virtual koi::rcode ApplicationCleanUp() override {
+            return koi::rcode::OK;
         }
         
-        virtual olc::rcode ThreadStartUp() override {
-            return olc::rcode::OK;
+        virtual koi::rcode ThreadStartUp() override {
+            return koi::rcode::OK;
         }
         
-        virtual olc::rcode ThreadCleanUp() override {
+        virtual koi::rcode ThreadCleanUp() override {
             renderer->DestroyDevice();
-            return olc::OK;
+            return koi::OK;
         }
         
-        virtual olc::rcode CreateGraphics(bool bFullScreen, bool bEnableVSYNC, const olc::Vector2i& vViewPos, const olc::Vector2i& vViewSize) override {
-            if (renderer->CreateDevice({}, bFullScreen, bEnableVSYNC) == olc::rcode::OK) {
+        virtual koi::rcode CreateGraphics(bool bFullScreen, bool bEnableVSYNC, const koi::Vector2i& vViewPos, const koi::Vector2i& vViewSize) override {
+            if (renderer->CreateDevice({}, bFullScreen, bEnableVSYNC) == koi::rcode::OK) {
                 renderer->UpdateViewport(vViewPos, vViewSize);
-                return olc::rcode::OK;
+                return koi::rcode::OK;
             } else {
-                return olc::rcode::FAIL;
+                return koi::rcode::FAIL;
             }
         }
         
@@ -1655,10 +1550,10 @@ namespace olc {
         }
         
         static void DrawFunct() {
-            ptrPGE->olc_CoreUpdate();
+            ptrPGE->koi_CoreUpdate();
         }
         
-        virtual olc::rcode CreateWindowPane(const olc::Vector2i& vWindowPos, olc::Vector2i& vWindowSize, bool bFullScreen) override {
+        virtual koi::rcode CreateWindowPane(const koi::Vector2i& vWindowPos, koi::Vector2i& vWindowSize, bool bFullScreen) override {
             renderer->PrepareDevice();
             
             
@@ -1670,7 +1565,7 @@ namespace olc {
             
             if (vWindowSize.x > glutGet(GLUT_SCREEN_WIDTH) || vWindowSize.y > glutGet(GLUT_SCREEN_HEIGHT)) {
                 perror("ERROR: The specified window dimensions do not fit on your screen\n");
-                return olc::FAIL;
+                return koi::FAIL;
             }
             
             // Create Keyboard Mapping
@@ -1703,11 +1598,11 @@ namespace olc {
                         if ('a' <= key && key <= 'z') key -= 32;
                         break;
                     case GLUT_ACTIVE_SHIFT:
-                        ptrPGE->olc_UpdateKeyState(Key::SHIFT, true);
+                        ptrPGE->koi_UpdateKeyState(Key::SHIFT, true);
                         break;
                     case GLUT_ACTIVE_CTRL:
                         if ('a' <= key && key <= 'z') key -= 32;
-                        ptrPGE->olc_UpdateKeyState(Key::CTRL, true);
+                        ptrPGE->koi_UpdateKeyState(Key::CTRL, true);
                         break;
                     case GLUT_ACTIVE_ALT:
                         if ('a' <= key && key <= 'z') key -= 32;
@@ -1715,7 +1610,7 @@ namespace olc {
                 }
                 
                 if (mapKeys[key])
-                    ptrPGE->olc_UpdateKeyState(mapKeys[key], true);
+                    ptrPGE->koi_UpdateKeyState(mapKeys[key], true);
             });
             
             glutKeyboardUpFunc([](unsigned char key, int x, int y) -> void {
@@ -1724,11 +1619,11 @@ namespace olc {
                         if ('a' <= key && key <= 'z') key -= 32;
                         break;
                     case GLUT_ACTIVE_SHIFT:
-                        ptrPGE->olc_UpdateKeyState(Key::SHIFT, false);
+                        ptrPGE->koi_UpdateKeyState(Key::SHIFT, false);
                         break;
                     case GLUT_ACTIVE_CTRL:
                         if ('a' <= key && key <= 'z') key -= 32;
-                        ptrPGE->olc_UpdateKeyState(Key::CTRL, false);
+                        ptrPGE->koi_UpdateKeyState(Key::CTRL, false);
                         break;
                     case GLUT_ACTIVE_ALT:
                         if ('a' <= key && key <= 'z') key -= 32;
@@ -1737,86 +1632,86 @@ namespace olc {
                 }
                 
                 if (mapKeys[key])
-                    ptrPGE->olc_UpdateKeyState(mapKeys[key], false);
+                    ptrPGE->koi_UpdateKeyState(mapKeys[key], false);
             });
             
             //Special keys
             glutSpecialFunc([](int key, int x, int y) -> void {
                 if (mapKeys[key])
-                    ptrPGE->olc_UpdateKeyState(mapKeys[key], true);
+                    ptrPGE->koi_UpdateKeyState(mapKeys[key], true);
             });
             
             glutSpecialUpFunc([](int key, int x, int y) -> void {
                 if (mapKeys[key])
-                    ptrPGE->olc_UpdateKeyState(mapKeys[key], false);
+                    ptrPGE->koi_UpdateKeyState(mapKeys[key], false);
             });
             
             glutMouseFunc([](int button, int state, int x, int y) -> void {
                 switch (button) {
                     case GLUT_LEFT_BUTTON:
-                        if (state == GLUT_UP) ptrPGE->olc_UpdateMouseState(0, false);
-                        else if (state == GLUT_DOWN) ptrPGE->olc_UpdateMouseState(0, true);
+                        if (state == GLUT_UP) ptrPGE->koi_UpdateMouseState(0, false);
+                        else if (state == GLUT_DOWN) ptrPGE->koi_UpdateMouseState(0, true);
                         break;
                     case GLUT_MIDDLE_BUTTON:
-                        if (state == GLUT_UP) ptrPGE->olc_UpdateMouseState(2, false);
-                        else if (state == GLUT_DOWN) ptrPGE->olc_UpdateMouseState(2, true);
+                        if (state == GLUT_UP) ptrPGE->koi_UpdateMouseState(2, false);
+                        else if (state == GLUT_DOWN) ptrPGE->koi_UpdateMouseState(2, true);
                         break;
                     case GLUT_RIGHT_BUTTON:
-                        if (state == GLUT_UP) ptrPGE->olc_UpdateMouseState(1, false);
-                        else if (state == GLUT_DOWN) ptrPGE->olc_UpdateMouseState(1, true);
+                        if (state == GLUT_UP) ptrPGE->koi_UpdateMouseState(1, false);
+                        else if (state == GLUT_DOWN) ptrPGE->koi_UpdateMouseState(1, true);
                         break;
                 }
             });
             
             auto mouseMoveCall = [](int x, int y) -> void {
-                ptrPGE->olc_UpdateMouse(x, y);
+                ptrPGE->koi_UpdateMouse(x, y);
             };
             
             glutMotionFunc(mouseMoveCall);
             glutPassiveMotionFunc(mouseMoveCall);
             
             glutEntryFunc([](int state) -> void {
-                if (state == GLUT_ENTERED) ptrPGE->olc_UpdateKeyFocus(true);
-                else if (state == GLUT_LEFT) ptrPGE->olc_UpdateKeyFocus(false);
+                if (state == GLUT_ENTERED) ptrPGE->koi_UpdateKeyFocus(true);
+                else if (state == GLUT_LEFT) ptrPGE->koi_UpdateKeyFocus(false);
             });
             
             glutDisplayFunc(DrawFunct);
             glutIdleFunc(ThreadFunct);
             
-            return olc::OK;
+            return koi::OK;
         }
         
-        virtual olc::rcode SetWindowTitle(const std::string& s) override {
+        virtual koi::rcode SetWindowTitle(const std::string& s) override {
             glutSetWindowTitle(s.c_str());
-            return olc::OK;
+            return koi::OK;
         }
         
-        virtual olc::rcode StartSystemEventLoop() override {
+        virtual koi::rcode StartSystemEventLoop() override {
             glutMainLoop();
-            return olc::OK;
+            return koi::OK;
         }
         
-        virtual olc::rcode HandleSystemEvent() override {
-            return olc::OK;
+        virtual koi::rcode HandleSystemEvent() override {
+            return koi::OK;
         }
     };
     
     std::atomic<bool>* Platform_GLUT::bActiveRef{ nullptr };
     
     //Custom Start
-    olc::rcode PixelGameEngine::Start() {
-        if (platform->ApplicationStartUp() != olc::OK) return olc::FAIL;
+    koi::rcode PixelGameEngine::Start() {
+        if (platform->ApplicationStartUp() != koi::OK) return koi::FAIL;
         
         // Construct the window
-        if (platform->CreateWindowPane({ 30,30 }, vWindowSize, bFullScreen) != olc::OK) return olc::FAIL;
-        olc_UpdateWindowSize(vWindowSize.x, vWindowSize.y);
+        if (platform->CreateWindowPane({ 30,30 }, vWindowSize, bFullScreen) != koi::OK) return koi::FAIL;
+        koi_UpdateWindowSize(vWindowSize.x, vWindowSize.y);
         
         
-        if (platform->ThreadStartUp() == olc::FAIL)  return olc::FAIL;
+        if (platform->ThreadStartUp() == koi::FAIL)  return koi::FAIL;
         
-        olc_PrepareEngine();
+        koi_PrepareEngine();
         
-        if (!OnUserCreate()) return olc::FAIL;
+        if (!OnUserCreate()) return koi::FAIL;
         
         Platform_GLUT::bActiveRef = &bAtomActive;
         
@@ -1827,9 +1722,9 @@ namespace olc {
         platform->StartSystemEventLoop();
         
         //This code will not even be run but why not
-        if (platform->ApplicationCleanUp() != olc::OK) return olc::FAIL;
+        if (platform->ApplicationCleanUp() != koi::OK) return koi::FAIL;
         
-        return olc::OK;
+        return koi::OK;
     }
 }
 
@@ -1838,34 +1733,32 @@ namespace olc {
 // | END PLATFORM: GLUT                                                           |
 // +------------------------------------------------------------------------------+
 
-
-
-namespace olc {
-    void PixelGameEngine::olc_ConfigureSystem() {
+namespace koi {
+    void PixelGameEngine::koi_ConfigureSystem() {
 #if defined(_WIN32)
-        platform = std::make_unique<olc::Platform_Windows>();
+        platform = std::make_unique<koi::Platform_Windows>();
 #endif
         
 #if defined(__linux__) || defined(__FreeBSD__)
-        platform = std::make_unique<olc::Platform_Linux>();
+        platform = std::make_unique<koi::Platform_Linux>();
 #endif
         
 #if defined(__APPLE__)
-        platform = std::make_unique<olc::Platform_GLUT>();
+        platform = std::make_unique<koi::Platform_GLUT>();
 #endif
         
         
         
-#if defined(OLC_GFX_OPENGL10)
-        renderer = std::make_unique<olc::Renderer_OGL10>();
+#if defined(KOI_GFX_OPENGL10)
+        renderer = std::make_unique<koi::Renderer_OGL10>();
 #endif
         
-#if defined(OLC_GFX_OPENGL33)
-        renderer = std::make_unique<olc::Renderer_OGL33>();
+#if defined(KOI_GFX_OPENGL33)
+        renderer = std::make_unique<koi::Renderer_OGL33>();
 #endif
         
-#if defined(OLC_GFX_DIRECTX10)
-        renderer = std::make_unique<olc::Renderer_DX10>();
+#if defined(KOI_GFX_DIRECTX10)
+        renderer = std::make_unique<koi::Renderer_DX10>();
 #endif
         
         // Associate components with PGE instance
@@ -1874,8 +1767,8 @@ namespace olc {
     }
 }
 
-#endif // End olc namespace
+#endif // End koi namespace
 
 // +------------------------------------------------------------------------------+
-// | END OF OLC_PGE_APPLICATION                                                   |
+// | END OF KOI_PGE_APPLICATION                                                   |
 // +------------------------------------------------------------------------------+

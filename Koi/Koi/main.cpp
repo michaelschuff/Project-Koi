@@ -1,28 +1,32 @@
-#define OLC_PGE_APPLICATION
-#include "olcPixelGameEngine.h"
+#define KOI_PGE_APPLICATION
+#include "koiPixelGameEngine.h"
 
-class Example : public olc::PixelGameEngine {
-    public:
-        Example() {
-            sAppName = "Example";
-        }
+class Example : public koi::PixelGameEngine {
+public:
+    Example() {
+        sAppName = "Example";
+    }
 
-    public:
-        bool OnUserCreate() override {
-            // Called once at the start, so create things here
-            return true;
-        }
+public:
+    bool OnUserCreate() override {
+        // Called once at the start, so create things here
+        return true;
+    }
 
-        bool OnUserUpdate(float fElapsedTime) override {
-            Clear(olc::BLACK);
-            // called once per frame
-            for (int x = 0; x < ScreenWidth(); x++)
-                for (int y = 0; y < ScreenHeight(); y++)
-                    Draw(x, y, olc::Pixel(rand() % 255, rand() % 255, rand()% 255));
-            
-            FillRect(GetMouseX(), GetMouseY(), 1, 1);
-            return true;
+    bool OnUserUpdate(float fElapsedTime) override {
+        Clear(koi::BLACK);
+        // called once per frame
+        for (int x = 0; x < ScreenWidth(); x++) {
+            for (int y = 0; y < ScreenHeight(); y++) {
+                if (GetMouseX() == x && GetMouseY() == y) {
+                    Draw(x, y, koi::WHITE);
+                } else {
+                    Draw(x, y, koi::Pixel(rand() % 255, rand() % 255, rand()% 255));
+                }
+            }
         }
+        return true;
+    }
 };
 
 
