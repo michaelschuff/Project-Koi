@@ -31,13 +31,7 @@
 		4CA4791D25B7931A00BFC6DA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4CB35B7F25CA2683005001AD /* Color.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = "<group>"; };
 		4CB35B8225CA2C7C005001AD /* Sprite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
-		4CB35B8425CA312A005001AD /* Platform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Platform.h; sourceTree = "<group>"; };
-		4CB35B8625CA32A0005001AD /* WindowsPlatform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WindowsPlatform.h; sourceTree = "<group>"; };
-		4CB35B8825CA3323005001AD /* MacPlatform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacPlatform.h; sourceTree = "<group>"; };
-		4CB35B8925CA332E005001AD /* LinuxPlatform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinuxPlatform.h; sourceTree = "<group>"; };
 		4CB35B8B25CA3538005001AD /* Global.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
-		4CB35B8D25CA3820005001AD /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
-		4CB35B8F25CA38B9005001AD /* PixelGameEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PixelGameEngine.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,7 +65,6 @@
 			isa = PBXGroup;
 			children = (
 				4CA4791D25B7931A00BFC6DA /* main.cpp */,
-				4CB35B8F25CA38B9005001AD /* PixelGameEngine.h */,
 				4C83378025C7752B00A2E259 /* koiPixelGameEngine.h */,
 				4C9ECD2125C9E8A1003584FE /* Vector2.h */,
 				4C9ECD1A25C9E33C003584FE /* Vector3.h */,
@@ -79,11 +72,6 @@
 				4CB35B7F25CA2683005001AD /* Color.h */,
 				4CB35B8225CA2C7C005001AD /* Sprite.h */,
 				4CB35B8B25CA3538005001AD /* Global.h */,
-				4CB35B8425CA312A005001AD /* Platform.h */,
-				4CB35B8D25CA3820005001AD /* Renderer.h */,
-				4CB35B8625CA32A0005001AD /* WindowsPlatform.h */,
-				4CB35B8825CA3323005001AD /* MacPlatform.h */,
-				4CB35B8925CA332E005001AD /* LinuxPlatform.h */,
 			);
 			path = Koi;
 			sourceTree = "<group>";
