@@ -34,9 +34,9 @@ namespace koi {
         
         void    rotate (const Quaternion<T>& q);
         Vector3 rotated(const Quaternion<T>& q) const;
-        void    rotate (const Vector3& axis,    const T& theta);
+        void    rotate (const Vector3& axis,   const T& theta);
         Vector3 rotated(const Vector3& axis,   const T& theta) const;
-        void    rotate (const Vector3& origin,  const Vector3& axis, const T& theta);
+        void    rotate (const Vector3& origin, const Vector3& axis, const T& theta);
         Vector3 rotated(const Vector3& origin, const Vector3& axis, const T& theta) const;
         
         Quaternion<T> operator +  (const T& rhs)       const;

@@ -9,7 +9,7 @@
 #define Global_h
 
     namespace koi {
-        class PixelGameEngine;
+        class KoiEngine;
         class Sprite;
         class Renderer;
         class Platform;

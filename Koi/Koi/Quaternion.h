@@ -16,10 +16,10 @@ namespace koi {
     struct Quaternion {
         T w = 0, x = 0, y = 0, z = 0;
         Quaternion() : w(1), x(0), y(0), z(0) {}
-        Quaternion(const T& _w, const T& _x, const T& _y, const T& _z) : w(_w), x(_x), y(_y), z(_z) {}
-        Quaternion(const T& _w, const Vector3<T>& v) : w(_w), x(v.x), y(v.y), z(v.z) {}
-        Quaternion(const Vector3<T>& v) : w(0), x(v.x), y(v.y), z(v.z) {}
-        Quaternion(const Quaternion& q) : w(q.w), x(q.x), y(q.y), z(q.z) {}
+        Quaternion(const T& _w, const T& _x, const T& _y, const T& _z) : w(_w),  x(_x),  y(_y),  z(_z)  {}
+        Quaternion(const T& _w, const Vector3<T>& v)                   : w(_w),  x(v.x), y(v.y), z(v.z) {}
+        Quaternion(const Vector3<T>& v)                                : w(0),   x(v.x), y(v.y), z(v.z) {}
+        Quaternion(const Quaternion& q)                                : w(q.w), x(q.x), y(q.y), z(q.z) {}
         Quaternion& operator=(const Quaternion& q) = default;
         
         Vector3<T>  v()          const;
@@ -58,11 +58,11 @@ namespace koi {
         static const Quaternion ZERO, IDENTITY, X_180, Y_180, Z_180;
     };
     
-    template<class T> const Quaternion<T> Quaternion<T>::ZERO(0, 0, 0, 0);
+    template<class T> const Quaternion<T> Quaternion<T>::ZERO    (0, 0, 0, 0);
     template<class T> const Quaternion<T> Quaternion<T>::IDENTITY(1, 0, 0, 0);
-    template<class T> const Quaternion<T> Quaternion<T>::X_180(0, 1, 0, 0);
-    template<class T> const Quaternion<T> Quaternion<T>::Y_180(0, 0, 1, 0);
-    template<class T> const Quaternion<T> Quaternion<T>::Z_180(0, 0, 0, 1);
+    template<class T> const Quaternion<T> Quaternion<T>::X_180   (0, 1, 0, 0);
+    template<class T> const Quaternion<T> Quaternion<T>::Y_180   (0, 0, 1, 0);
+    template<class T> const Quaternion<T> Quaternion<T>::Z_180   (0, 0, 0, 1);
     
     template<class T> Quaternion<T> GetQuaternion(const Vector3<T>& axis, const T& theta) { return Quaternion<T>(cos(theta/2), sin(theta/2) * axis.normalized()).normalized(); }
     template<class T> Quaternion<T> GetQuaternion(const Vector3<T>& start, const Vector3<T>& end) {

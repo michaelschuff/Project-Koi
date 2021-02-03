@@ -206,7 +206,7 @@
             std::atomic<bool>* Platform_GLUT::bActiveRef{ nullptr };
             
             //Custom Start
-            koi::rcode PixelGameEngine::Start() {
+            koi::rcode KoiEngine::Start() {
                 if (platform->ApplicationStartUp() != koi::OK) return koi::FAIL;
                 
                 // Construct the window

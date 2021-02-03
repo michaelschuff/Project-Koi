@@ -30,8 +30,8 @@
   SUCH DAMAGE.
 */
 
-#ifndef KOI_PGE_DEF
-#define KOI_PGE_DEF
+#ifndef Koi_Engine_DEF
+#define Koi_Engine_DEF
 
     // MARK: Standard Includes
     #include <cmath>
@@ -57,7 +57,7 @@
     #include "Renderer.h"
     #include "Platform.h"
     #include "Global.h"
-    #include "PixelGameEngine.h"
+    #include "KoiEngine.h"
     #include "WindowsPlatform.h"
     #include "LinuxPlatform.h"
     #include "MacintoshPlatform.h"
@@ -121,29 +121,29 @@
             #define PGE_ILOADER_LIBPNG
         #endif
     #endif
-#endif // KOI_PGE_DEF
+#endif // Koi_Engine_DEF
 
 
 
-// MARK: KOI_PGE_APPLICATION
+// MARK: KOI_ENGINE_APPLICATION
 // +------------------------------------------------------------------------------+
-// | START OF KOI_PGE_APPLICATION                                                 |
+// | START OF KOI_ENGINE_APPLICATION                                              |
 // +------------------------------------------------------------------------------+
-#ifdef KOI_PGE_APPLICATION
-#undef KOI_PGE_APPLICATION
+#ifdef KOI_ENGINE_APPLICATION
+#undef KOI_ENGINE_APPLICATION
 
-    // MARK: koi::PixelGameEngine impl;
+    // MARK: koi::KoiEngine impl;
     namespace koi {
         // Need a couple of statics as these are singleton instances
         // read from multiple locations
-        std::atomic<bool> PixelGameEngine::bAtomActive{ false };
-        koi::PixelGameEngine* koi::Platform::ptrPGE = nullptr;
-        koi::PixelGameEngine* koi::Renderer::ptrPGE = nullptr;
+        std::atomic<bool> KoiEngine::bAtomActive{ false };
+        koi::KoiEngine* koi::Platform::ptrPGE = nullptr;
+        koi::KoiEngine* koi::Renderer::ptrPGE = nullptr;
     };
 
     // MARK: Platform Specifics;
     // +------------------------------------------------------------------------------+
-    // | koiPixelGameEngine PLATFORM SPECIFIC IMPLEMENTATIONS                         |
+    // | KoiEngine PLATFORM SPECIFIC IMPLEMENTATIONS                                  |
     // +------------------------------------------------------------------------------+
 
 
@@ -221,7 +221,7 @@
     // +------------------------------------------------------------------------------+
 
     namespace koi {
-        void PixelGameEngine::koi_ConfigureSystem() {
+        void KoiEngine::koi_ConfigureSystem() {
             #if defined(_WIN32)
                 platform = std::make_unique<koi::Platform_Windows>();
             #endif
@@ -254,8 +254,8 @@
         }
     }
 
-#endif // KOI_PGE_APPLICATION
+#endif // KOI_ENGINE_APPLICATION
 
 // +------------------------------------------------------------------------------+
-// | END OF KOI_PGE_APPLICATION                                                   |
+// | END OF KOI_ENGINE_APPLICATION                                                |
 // +------------------------------------------------------------------------------+

@@ -26,7 +26,7 @@
             virtual koi::rcode SetWindowTitle(const std::string& s) = 0;
             virtual koi::rcode StartSystemEventLoop() = 0;
             virtual koi::rcode HandleSystemEvent() = 0;
-            static koi::PixelGameEngine* ptrPGE;
+            static koi::KoiEngine* ptrPGE;
         };
     }
     

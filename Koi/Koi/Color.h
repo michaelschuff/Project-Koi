@@ -30,11 +30,23 @@ namespace koi {
         
         enum Mode { NORMAL, MASK, ALPHA, CUSTOM };
         
-        Color() : r(0), g(0), b(0), a(nDefaultAlpha) {}
+        Color() { r = 0; g = 0; b = 0; a = nDefaultAlpha; }
         Color(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a = nDefaultAlpha) : n(_r | (_g << 8) | (_b << 16) | (_a << 24)) {}
-        Color(uint32_t p) : n(p) {}
-        bool operator==(const Color& p) const;
-        bool operator!=(const Color& p) const;
+        Color(uint32_t c) { n = c; }
+        
+        Color  inverse() const;
+        
+        Color& operator =  (const Color& v) = default;
+        bool   operator == (const Color& p) const;
+        bool   operator != (const Color& p) const;
+        Color  operator *  (const float i) const;
+        Color  operator /  (const float i) const;
+        Color& operator *= (const float i);
+        Color& operator /= (const float i);
+        Color  operator +  (const Color& p) const;
+        Color  operator -  (const Color& p) const;
+        Color& operator += (const Color& p);
+        Color& operator -= (const Color& p);
     };
     
     const Color Color::GREY   (192, 192, 192), Color::DARK_GREY   (128, 128, 128), Color::VERY_DARK_GREY   ( 64,  64,  64);
@@ -47,13 +59,66 @@ namespace koi {
     const Color Color::WHITE  (255, 255, 255), Color::BLACK       (  0,   0,   0), Color::BLANK            (  0,   0,   0,   0);
     
     
+    Color Color::inverse() const {
+        return Color(uint8_t(std::min(std::max(0, 255 - r), 255)),
+                     uint8_t(std::min(std::max(0, 255 - g), 255)),
+                     uint8_t(std::min(std::max(0, 255 - b), 255)),
+                     a);
+    }
     
+    bool   Color::operator==(const Color& p) const { return n == p.n; }
+    bool   Color::operator!=(const Color& p) const { return n != p.n; }
+    Color  Color::operator *  (const float i) const { return Color(uint8_t(std::min(std::max(0.0f, r * i), 255.0f)),
+                                                                   uint8_t(std::min(std::max(0.0f, g * i), 255.0f)),
+                                                                   uint8_t(std::min(std::max(0.0f, b * i), 255.0f)),
+                                                                   a); }
     
-    bool Color::operator==(const Color& p) const { return n == p.n; }
-    bool Color::operator!=(const Color& p) const { return n != p.n; }
+    Color  Color::operator /  (const float i) const { return *this * (1.0f / i); }
+    
+    Color& Color::operator *= (const float i) {
+        this->r = uint8_t(std::min(std::max(0.0f, r * i), 255.0f));
+        this->g = uint8_t(std::min(std::max(0.0f, g * i), 255.0f));
+        this->b = uint8_t(std::min(std::max(0.0f, b * i), 255.0f));
+        return *this;
+    }
+    
+    Color& Color::operator /= (const float i) {
+        this->r = uint8_t(std::min(std::max(0.0f, r / i), 255.0f));
+        this->g = uint8_t(std::min(std::max(0.0f, g / i), 255.0f));
+        this->b = uint8_t(std::min(std::max(0.0f, b / i), 255.0f));
+        return *this;
+    }
+    
+    Color  Color::operator +  (const Color& p) const {
+        return Color(uint8_t(std::min(std::max(0, int(r) + p.r), 255)),
+                     uint8_t(std::min(std::max(0, int(g) + p.g), 255)),
+                     uint8_t(std::min(std::max(0, int(b) + p.b), 255)),
+                     a);
+    }
+    Color  Color::operator -  (const Color& p) const {
+        return Color(uint8_t(std::min(std::max(0, int(r) - p.r), 255)),
+                     uint8_t(std::min(std::max(0, int(g) - p.g), 255)),
+                     uint8_t(std::min(std::max(0, int(b) - p.b), 255)),
+                     a);
+    }
+    Color& Color::operator += (const Color& p) {
+        this->r = uint8_t(std::min(std::max(0, int(r) + p.r), 255));
+        this->g = uint8_t(std::min(std::max(0, int(g) + p.g), 255));
+        this->b = uint8_t(std::min(std::max(0, int(b) + p.b), 255));
+        return *this;
+    }
+    
+    Color& Color::operator -= (const Color& p) {
+        this->r = uint8_t(std::min(std::max(0, int(r) - p.r), 255));
+        this->g = uint8_t(std::min(std::max(0, int(g) - p.g), 255));
+        this->b = uint8_t(std::min(std::max(0, int(b) - p.b), 255));
+        return *this;
+    }
     
     Color ColorF(float  _r, float  _g, float  _b, float  _a = nDefaultAlpha) { return Color(uint8_t(_r * 255), uint8_t(_g * 255), uint8_t(_b * 255), uint8_t(_a * 255)); }
     Color ColorD(double _r, double _g, double _b, double _a = nDefaultAlpha) { return Color(uint8_t(_r * 255), uint8_t(_g * 255), uint8_t(_b * 255), uint8_t(_a * 255)); }
+    
+    Color Lerp(const Color& c1, const Color& c2, float t) { return (c1 * t) + c2 * (1.0f - t); }
 }
 
 #endif /* Color_h */
