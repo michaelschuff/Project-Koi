@@ -8,7 +8,7 @@
 #ifndef Quaternion_h
 #define Quaternion_h
 
-#include "math.h"
+#include <math.h>
 #include "Vector3.h"
 
 namespace koi {

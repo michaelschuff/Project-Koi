@@ -31,7 +31,9 @@
 		4CA4791D25B7931A00BFC6DA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4CB35B7F25CA2683005001AD /* Color.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = "<group>"; };
 		4CB35B8225CA2C7C005001AD /* Sprite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
-		4CB35B8B25CA3538005001AD /* Global.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
+		4CB35B9825CA540E005001AD /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
+		4CB35B9925CA542C005001AD /* Platform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Platform.h; sourceTree = "<group>"; };
+		4CB35B9B25CA5484005001AD /* Global.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,12 +68,14 @@
 			children = (
 				4CA4791D25B7931A00BFC6DA /* main.cpp */,
 				4C83378025C7752B00A2E259 /* koiPixelGameEngine.h */,
+				4CB35B9B25CA5484005001AD /* Global.h */,
+				4CB35B9825CA540E005001AD /* Renderer.h */,
+				4CB35B9925CA542C005001AD /* Platform.h */,
 				4C9ECD2125C9E8A1003584FE /* Vector2.h */,
 				4C9ECD1A25C9E33C003584FE /* Vector3.h */,
 				4C9ECD1925C9E255003584FE /* Quaternion.h */,
 				4CB35B7F25CA2683005001AD /* Color.h */,
 				4CB35B8225CA2C7C005001AD /* Sprite.h */,
-				4CB35B8B25CA3538005001AD /* Global.h */,
 			);
 			path = Koi;
 			sourceTree = "<group>";
