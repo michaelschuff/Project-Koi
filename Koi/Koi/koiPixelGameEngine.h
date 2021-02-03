@@ -51,6 +51,7 @@
 #include <algorithm>
 #include <array>
 #include <cstring>
+#include "Vector2.h"
 
 
 // MARK: Compiler Configuration
@@ -174,65 +175,6 @@ namespace koi {
     };
     
     
-    // MARK: koi::vX2d
-    // +------------------------------------------------------------------------------+
-    // | koi::vX2d - A generic 2D vector type                                         |
-    // +------------------------------------------------------------------------------+
-#if !defined(KOI_IGNORE_VEC2D)
-    template <class T>
-    struct Vector2 {
-        T x = 0, y = 0;
-        Vector2() : x(0), y(0) {}
-        Vector2(T _x, T _y) : x(_x), y(_y) {}
-        Vector2(const Vector2& v) : x(v.x), y(v.y) {}
-        Vector2& operator=(const Vector2& v) = default;
-        T mag() { return T(std::sqrt(x * x + y * y)); }
-        T mag2() { return x * x + y * y; }
-        Vector2  norm() { T r = 1 / mag(); return Vector2(x * r, y * r); }
-        Vector2  perp() { return Vector2(-y, x); }
-        T dot(const Vector2& rhs) { return this->x * rhs.x + this->y * rhs.y; }
-        T cross(const Vector2& rhs) { return this->x * rhs.y - this->y * rhs.x; }
-        Vector2  operator +  (const Vector2& rhs) const { return Vector2(this->x + rhs.x, this->y + rhs.y); }
-        Vector2  operator -  (const Vector2& rhs) const { return Vector2(this->x - rhs.x, this->y - rhs.y); }
-        Vector2  operator *  (const T& rhs)       const { return Vector2(this->x * rhs,   this->y * rhs); }
-        Vector2  operator *  (const Vector2& rhs) const { return Vector2(this->x * rhs.x, this->y * rhs.y); }
-        Vector2  operator /  (const T& rhs)       const { return Vector2(this->x / rhs,   this->y / rhs); }
-        Vector2  operator /  (const Vector2& rhs) const { return Vector2(this->x / rhs.x, this->y / rhs.y); }
-        Vector2& operator += (const Vector2& rhs) { this->x += rhs.x; this->y += rhs.y; return *this; }
-        Vector2& operator -= (const Vector2& rhs) { this->x -= rhs.x; this->y -= rhs.y; return *this; }
-        Vector2& operator *= (const T& rhs) { this->x *= rhs; this->y *= rhs; return *this; }
-        Vector2& operator /= (const T& rhs) { this->x /= rhs; this->y /= rhs; return *this; }
-        Vector2  operator +  () const { return { +x, +y }; }
-        Vector2  operator -  () const { return { -x, -y }; }
-        bool operator == (const Vector2& rhs) const { return (this->x == rhs.x && this->y == rhs.y); }
-        bool operator != (const Vector2& rhs) const { return (this->x != rhs.x || this->y != rhs.y); }
-        const std::string str() const { return std::string("(") + std::to_string(this->x) + "," + std::to_string(this->y) + ")"; }
-        friend std::ostream& operator << (std::ostream& os, const Vector2& rhs) { os << rhs.str(); return os; }
-        operator Vector2<int32_t>() const { return { static_cast<int32_t>(this->x), static_cast<int32_t>(this->y) }; }
-        operator Vector2<float>()   const { return { static_cast<float>  (this->x), static_cast<float>  (this->y) }; }
-        operator Vector2<double>()  const { return { static_cast<double> (this->x), static_cast<double> (this->y) }; }
-    };
-    
-    template<class T> inline Vector2<T> operator * (const float& lhs, const Vector2<T>& rhs)
-    { return Vector2<T>((T)(lhs * (float) rhs.x), (T)(lhs * (float) rhs.y)); }
-    template<class T> inline Vector2<T> operator * (const double& lhs, const Vector2<T>& rhs)
-    { return Vector2<T>((T)(lhs * (double)rhs.x), (T)(lhs * (double)rhs.y)); }
-    template<class T> inline Vector2<T> operator * (const int& lhs, const Vector2<T>& rhs)
-    { return Vector2<T>((T)(lhs * (int)   rhs.x), (T)(lhs * (int)   rhs.y)); }
-    template<class T> inline Vector2<T> operator / (const float& lhs, const Vector2<T>& rhs)
-    { return Vector2<T>((T)(lhs / (float) rhs.x), (T)(lhs / (float) rhs.y)); }
-    template<class T> inline Vector2<T> operator / (const double& lhs, const Vector2<T>& rhs)
-    { return Vector2<T>((T)(lhs / (double)rhs.x), (T)(lhs / (double)rhs.y)); }
-    template<class T> inline Vector2<T> operator / (const int& lhs, const Vector2<T>& rhs)
-    { return Vector2<T>((T)(lhs / (int)   rhs.x), (T)(lhs / (int)   rhs.y)); }
-    
-    typedef Vector2<int32_t> Vector2i;
-    typedef Vector2<uint32_t> Vector2u;
-    typedef Vector2<float> Vector2f;
-    typedef Vector2<double> Vector2d;
-#endif
-    
-    
     // MARK: koi::HWButton
     // +------------------------------------------------------------------------------+
     // | koi::HWButton - Represents the state of a hardware button (mouse/key/joy)    |
@@ -261,7 +203,7 @@ namespace koi {
     public:
         Pixel GetPixel(int32_t x, int32_t y) const;
         bool  SetPixel(int32_t x, int32_t y, Pixel p);
-        Pixel GetPixel(const koi::Vector2i& a) const;
+        Pixel GetPixel(const Vector2i& a) const;
         bool  SetPixel(const koi::Vector2i& a, Pixel p);
         Pixel* GetData();
         Pixel* pColData = nullptr;
@@ -385,7 +327,8 @@ namespace koi {
     public: // DRAWING ROUTINES
         virtual bool Draw(int32_t x, int32_t y, Pixel p = koi::WHITE);
         bool Draw(const koi::Vector2i& pos, Pixel p = koi::WHITE);
-        
+        void FillTriangle(const Vector2i& pos1, const Vector2i& pos2, const Vector2i& pos3, Pixel p = koi::WHITE);
+        void FillTriangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, Pixel p = koi::WHITE);
         void Clear(Pixel p);
         void ClearBuffer(Pixel p, bool bDepth = true);  // Clears the rendering back buffer
         
@@ -644,6 +587,149 @@ namespace koi {
         }
         if (nPixelMode == Pixel::CUSTOM) return pDrawTarget->SetPixel(x, y, funcPixelMode(x, y, p, pDrawTarget->GetPixel(x, y)));
         return false;
+    }
+    
+    void PixelGameEngine::FillTriangle(const koi::Vector2i& pos1, const koi::Vector2i& pos2, const koi::Vector2i& pos3, Pixel p) { FillTriangle(pos1.x, pos1.y, pos2.x, pos2.y, pos3.x, pos3.y, p); }
+    
+    void PixelGameEngine::FillTriangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, Pixel p) {
+        auto drawline = [&](int sx, int ex, int ny) { for (int i = sx; i <= ex; i++) Draw(i, ny, p); };
+
+        int t1x, t2x, y, minx, maxx, t1xp, t2xp;
+        bool changed1 = false;
+        bool changed2 = false;
+        int signx1, signx2, dx1, dy1, dx2, dy2;
+        int e1, e2;
+        
+        // Sort vertices
+        if (y1 > y2) { std::swap(y1, y2); std::swap(x1, x2); }
+        if (y1 > y3) { std::swap(y1, y3); std::swap(x1, x3); }
+        if (y2 > y3) { std::swap(y2, y3); std::swap(x2, x3); }
+
+        t1x = t2x = x1; y = y1;                             // Starting points
+        dx1 = (int)(x2 - x1);
+        if (dx1 < 0) { dx1 = -dx1; signx1 = -1; }
+        else signx1 = 1;
+        dy1 = (int)(y2 - y1);
+
+        dx2 = (int)(x3 - x1);
+        if (dx2 < 0) { dx2 = -dx2; signx2 = -1; }
+        else signx2 = 1;
+        dy2 = (int)(y3 - y1);
+
+        if (dy1 > dx1) { std::swap(dx1, dy1); changed1 = true; }
+        if (dy2 > dx2) { std::swap(dy2, dx2); changed2 = true; }
+
+        e2 = (int)(dx2 >> 1);
+        
+        // Flat top, just process the second half
+        if (y1 == y2) goto next;
+        e1 = (int)(dx1 >> 1);
+
+        for (int i = 0; i < dx1;) {
+            t1xp = 0; t2xp = 0;
+            if (t1x < t2x) { minx = t1x; maxx = t2x; }
+            else { minx = t2x; maxx = t1x; }
+            
+            while (i < dx1) {                               // process first line until y value is about to change
+                i++;
+                e1 += dy1;
+                while (e1 >= dx1) {
+                    e1 -= dx1;
+                    if (changed1) t1xp = signx1;            //t1x += signx1;
+                    else          goto next1;
+                }
+                if (changed1) break;
+                else t1x += signx1;
+            }
+            
+            // Move line
+            next1:
+            while (1) {                                     // process second line until y value is about to change
+                e2 += dy2;
+                while (e2 >= dx2) {
+                    e2 -= dx2;
+                    if (changed2) t2xp = signx2;            //t2x += signx2;
+                    else          goto next2;
+                }
+                if (changed2)     break;
+                else              t2x += signx2;
+            }
+            
+            next2:
+            if (minx > t1x) minx = t1x;
+            if (minx > t2x) minx = t2x;
+            if (maxx < t1x) maxx = t1x;
+            if (maxx < t2x) maxx = t2x;
+            drawline(minx, maxx, y);                        // Draw line from min to max points found on the y
+                                                            // Now increase y
+            if (!changed1) t1x += signx1;
+            t1x += t1xp;
+            if (!changed2) t2x += signx2;
+            t2x += t2xp;
+            y += 1;
+            if (y == y2) break;
+
+        }
+        
+        // Second half
+        next:
+        dx1 = (int)(x3 - x2); if (dx1 < 0) { dx1 = -dx1; signx1 = -1; }
+        else signx1 = 1;
+        dy1 = (int)(y3 - y2);
+        t1x = x2;
+
+        // swap values
+        if (dy1 > dx1) {
+            std::swap(dy1, dx1);
+            changed1 = true;
+        }
+        else changed1 = false;
+
+        e1 = (int)(dx1 >> 1);
+
+        for (int i = 0; i <= dx1; i++) {
+            t1xp = 0; t2xp = 0;
+            if (t1x < t2x) { minx = t1x; maxx = t2x; }
+            else { minx = t2x; maxx = t1x; }
+            
+            while (i < dx1) {                               // process first line until y value is about to change
+                e1 += dy1;
+                while (e1 >= dx1) {
+                    e1 -= dx1;
+                    if (changed1) { t1xp = signx1; break; } // t1x += signx1;
+                    else          goto next3;
+                }
+                if (changed1) break;
+                else          t1x += signx1;
+                if (i < dx1) i++;
+            }
+            
+            next3:
+            
+            while (t2x != x3) {                             // process second line until y value is about to change
+                e2 += dy2;
+                while (e2 >= dx2) {
+                    e2 -= dx2;
+                    if (changed2) t2xp = signx2;
+                    else          goto next4;
+                }
+                if (changed2)     break;
+                else              t2x += signx2;
+            }
+            next4:
+
+            if (minx > t1x) minx = t1x;
+            if (minx > t2x) minx = t2x;
+            if (maxx < t1x) maxx = t1x;
+            if (maxx < t2x) maxx = t2x;
+            drawline(minx, maxx, y);
+            if (!changed1) t1x += signx1;
+            t1x += t1xp;
+            if (!changed2) t2x += signx2;
+            t2x += t2xp;
+            y += 1;
+            if (y > y3) return;
+        }
     }
     
     void PixelGameEngine::Clear(Pixel p) {

@@ -1,5 +1,6 @@
 #define KOI_PGE_APPLICATION
 #include "koiPixelGameEngine.h"
+#include "Quaternion.h"
 
 class Example : public koi::PixelGameEngine {
 public:
@@ -25,6 +26,7 @@ public:
                 }
             }
         }
+        FillTriangle(10, 10, 40, 40, 50, 10, koi::Pixel(255, 128, 0));
         return true;
     }
 };
@@ -32,7 +34,7 @@ public:
 
 int main(int argc, char const *argv[]) {
 	Example demo;
-	if (demo.Construct(15, 10, 32, 32))
+	if (demo.Construct(600, 400, 1, 1))
 		demo.Start();
 
 	return 0;

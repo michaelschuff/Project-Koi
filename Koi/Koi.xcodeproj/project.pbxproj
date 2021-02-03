@@ -24,7 +24,9 @@
 
 /* Begin PBXFileReference section */
 		4C83378025C7752B00A2E259 /* koiPixelGameEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = koiPixelGameEngine.h; sourceTree = "<group>"; };
-		4C83378425C779F400A2E259 /* olcPixelGameEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = olcPixelGameEngine.h; sourceTree = "<group>"; };
+		4C9ECD1925C9E255003584FE /* Quaternion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Quaternion.h; sourceTree = "<group>"; };
+		4C9ECD1A25C9E33C003584FE /* Vector3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vector3.h; sourceTree = "<group>"; };
+		4C9ECD2125C9E8A1003584FE /* Vector2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vector2.h; sourceTree = "<group>"; };
 		4CA4791A25B7931A00BFC6DA /* Koi */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Koi; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CA4791D25B7931A00BFC6DA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -61,7 +63,9 @@
 			children = (
 				4CA4791D25B7931A00BFC6DA /* main.cpp */,
 				4C83378025C7752B00A2E259 /* koiPixelGameEngine.h */,
-				4C83378425C779F400A2E259 /* olcPixelGameEngine.h */,
+				4C9ECD2125C9E8A1003584FE /* Vector2.h */,
+				4C9ECD1A25C9E33C003584FE /* Vector3.h */,
+				4C9ECD1925C9E255003584FE /* Quaternion.h */,
 			);
 			path = Koi;
 			sourceTree = "<group>";
