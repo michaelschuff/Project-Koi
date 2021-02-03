@@ -41,5 +41,10 @@
             bool bReleased = false; // Set once during the frame the event occurs
             bool bHeld = false;   // Set true for all frames between pressed and released events
         };
+        
+        
+        static std::unique_ptr<Renderer> renderer;
+        static std::unique_ptr<Platform> platform;
+        static std::map<size_t, uint8_t> mapKeys;
     }
 #endif /* Global_h */
