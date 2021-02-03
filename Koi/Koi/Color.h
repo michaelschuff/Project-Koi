@@ -8,6 +8,7 @@
 #ifndef Color_h
 #define Color_h
 
+
 namespace koi {
     
     constexpr uint8_t  nDefaultAlpha = 0xFF;

@@ -1,5 +1,5 @@
 #define KOI_PGE_APPLICATION
-#include "koiPixelGameEngine.h"
+#include "PixelGameEngine.h"
 
 class Example : public koi::PixelGameEngine {
 public:
