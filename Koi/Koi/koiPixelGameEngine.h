@@ -52,6 +52,8 @@
 #include <array>
 #include <cstring>
 #include "Vector2.h"
+#include "Color.h"
+#include "Sprite.h"
 
 
 // MARK: Compiler Configuration
@@ -125,42 +127,12 @@ namespace koi {
     
     // Pixel Game Engine Advanced Configuration
     constexpr uint8_t  nMouseButtons = 5;
-    constexpr uint8_t  nDefaultAlpha = 0xFF;
-    constexpr uint32_t nDefaultPixel = (nDefaultAlpha << 24);
     enum rcode { FAIL = 0, OK = 1, NO_FILE = -1 };
     
-    // MARK: koi::Pixel
-    // +------------------------------------------------------------------------------+
-    // | koi::Pixel - Represents a 32-Bit RGBA colour                                 |
-    // +------------------------------------------------------------------------------+
-    struct Pixel {
-        union {
-            uint32_t n = nDefaultPixel;
-            struct { uint8_t r; uint8_t g; uint8_t b; uint8_t a; };
-        };
-        
-        enum Mode { NORMAL, MASK, ALPHA, CUSTOM };
-        
-        Pixel();
-        Pixel(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = nDefaultAlpha);
-        Pixel(uint32_t p);
-        bool operator==(const Pixel& p) const;
-        bool operator!=(const Pixel& p) const;
-    };
-    
-    Pixel PixelF(float red, float green, float blue, float alpha = 1.0f);
     
     
     //MARK: Constants
-    static const Pixel
-    GREY(192, 192, 192), DARK_GREY(128, 128, 128), VERY_DARK_GREY(64, 64, 64),
-    RED(255, 0, 0), DARK_RED(128, 0, 0), VERY_DARK_RED(64, 0, 0),
-    YELLOW(255, 255, 0), DARK_YELLOW(128, 128, 0), VERY_DARK_YELLOW(64, 64, 0),
-    GREEN(0, 255, 0), DARK_GREEN(0, 128, 0), VERY_DARK_GREEN(0, 64, 0),
-    CYAN(0, 255, 255), DARK_CYAN(0, 128, 128), VERY_DARK_CYAN(0, 64, 64),
-    BLUE(0, 0, 255), DARK_BLUE(0, 0, 128), VERY_DARK_BLUE(0, 0, 64),
-    MAGENTA(255, 0, 255), DARK_MAGENTA(128, 0, 128), VERY_DARK_MAGENTA(64, 0, 64),
-    WHITE(255, 255, 255), BLACK(0, 0, 0), BLANK(0, 0, 0, 0);
+    
     
     enum Key {
         NONE,
@@ -185,31 +157,6 @@ namespace koi {
         bool bHeld = false;   // Set true for all frames between pressed and released events
     };
     
-    
-    // MARK: koi::Sprite
-    // +------------------------------------------------------------------------------+
-    // | koi::Sprite - An image represented by a 2D array of koi::Pixel               |
-    // +------------------------------------------------------------------------------+
-    class Sprite {
-    public:
-        Sprite(int32_t w, int32_t h);
-        ~Sprite();
-        
-    public:
-        int32_t width = 0, height = 0;
-        enum Mode { NORMAL, PERIODIC };
-        enum Flip { NONE = 0, HORIZ = 1, VERT = 2 };
-        
-    public:
-        Pixel GetPixel(int32_t x, int32_t y) const;
-        bool  SetPixel(int32_t x, int32_t y, Pixel p);
-        Pixel GetPixel(const Vector2i& a) const;
-        bool  SetPixel(const koi::Vector2i& a, Pixel p);
-        Pixel* GetData();
-        Pixel* pColData = nullptr;
-        Mode modeSample = Mode::NORMAL;
-    };
-    
     // MARK: koi::Renderer
     // +------------------------------------------------------------------------------+
     // | koi::Renderer - Renders                                                      |
@@ -222,13 +169,13 @@ namespace koi {
         virtual koi::rcode DestroyDevice() = 0;
         virtual void       DisplayFrame() = 0;
         virtual void       PrepareDrawing() = 0;
-        virtual void       DrawWindowQuad(const koi::Vector2f& offset, const koi::Vector2f& scale, const koi::Pixel tint) = 0;
+        virtual void       DrawWindowQuad(const koi::Vector2f& offset, const koi::Vector2f& scale, const koi::Color tint) = 0;
         virtual uint32_t   CreateTexture(const uint32_t width, const uint32_t height) = 0;
         virtual void       UpdateTexture(uint32_t id, koi::Sprite* spr) = 0;
         virtual uint32_t   DeleteTexture(const uint32_t id) = 0;
         virtual void       ApplyTexture(uint32_t id) = 0;
         virtual void       UpdateViewport(const koi::Vector2i& pos, const koi::Vector2i& size) = 0;
-        virtual void       ClearBuffer(koi::Pixel p, bool bDepth) = 0;
+        virtual void       ClearBuffer(koi::Color p, bool bDepth) = 0;
         static koi::PixelGameEngine* ptrPGE;
     };
     
@@ -287,8 +234,8 @@ namespace koi {
         const koi::Vector2i& GetMousePos() const;       // Gets the mouse as a vector to keep Tarriest happy
         
     public: // Utility
-        Pixel* pColData = nullptr;
-        Pixel::Mode modeSample = Pixel::Mode::NORMAL;
+        Color* pColData = nullptr;
+        Color::Mode modeSample = Color::Mode::NORMAL;
         
         int32_t ScreenWidth() const;                        // Returns the width of the screen in "pixels"
         int32_t ScreenHeight() const;                       // Returns the height of the screen in "pixels"
@@ -309,7 +256,7 @@ namespace koi {
         void SetWindowOffset(float x, float y);
         void SetWindowScale(const koi::Vector2f& scale);
         void SetWindowScale(float x, float y);
-        void SetWindowTint(const koi::Pixel& tint);
+        void SetWindowTint(const koi::Color& tint);
         void SetWindowCustomRenderFunction(std::function<void()> f);
         
         
@@ -317,27 +264,27 @@ namespace koi {
         // koi::Pixel::NORMAL = No transparency
         // koi::Pixel::MASK   = Transparent if alpha is < 255
         // koi::Pixel::ALPHA  = Full transparency
-        void SetPixelMode(Pixel::Mode m);
-        Pixel::Mode GetPixelMode();
-        void SetPixelMode(std::function<koi::Pixel(const int x, const int y, const koi::Pixel& pSource, const koi::Pixel& pDest)> pixelMode);   // Use a custom blend function
+        void SetPixelMode(Color::Mode m);
+        Color::Mode GetPixelMode();
+        void SetPixelMode(std::function<koi::Color(const int x, const int y, const koi::Color& pSource, const koi::Color& pDest)> pixelMode);   // Use a custom blend function
         void SetPixelBlend(float fBlend);   // Change the blend factor form between 0.0f to 1.0f;
         
         
         
     public: // DRAWING ROUTINES
-        virtual bool Draw(int32_t x, int32_t y, Pixel p = koi::WHITE);
-        bool Draw(const koi::Vector2i& pos, Pixel p = koi::WHITE);
-        void FillTriangle(const Vector2i& pos1, const Vector2i& pos2, const Vector2i& pos3, Pixel p = koi::WHITE);
-        void FillTriangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, Pixel p = koi::WHITE);
-        void Clear(Pixel p);
-        void ClearBuffer(Pixel p, bool bDepth = true);  // Clears the rendering back buffer
+        virtual bool Draw(int32_t x, int32_t y, Color p = Color::WHITE);
+        bool Draw(const koi::Vector2i& pos, Color p = Color::WHITE);
+        void FillTriangle(const Vector2i& pos1, const Vector2i& pos2, const Vector2i& pos3, Color p = Color::WHITE);
+        void FillTriangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, Color p = Color::WHITE);
+        void Clear(Color p);
+        void ClearBuffer(Color p, bool bDepth = true);  // Clears the rendering back buffer
         
         
     public: // Branding
         std::string sAppName;
         
     private: // Inner mysterious workings
-        Pixel::Mode     nPixelMode = Pixel::NORMAL;
+        Color::Mode     nColorMode = Color::NORMAL;
         float           fBlendFactor = 1.0f;
         koi::Vector2i   vScreenSize = { 256, 240 };
         koi::Vector2f   vInvScreenSize = { 1.0f / 256.0f, 1.0f / 240.0f };
@@ -361,7 +308,7 @@ namespace koi {
         int             nFrameCount = 0;
         uint32_t        nLastFPS = 0;
         bool            bPixelCohesion = false;
-        std::function<koi::Pixel(const int x, const int y, const koi::Pixel&, const koi::Pixel&)> funcPixelMode;
+        std::function<koi::Color(const int x, const int y, const koi::Color&, const koi::Color&)> funcPixelMode;
         std::chrono::time_point<std::chrono::system_clock> m_tp1, m_tp2;
         
         // Window vars
@@ -369,7 +316,7 @@ namespace koi {
         koi::Vector2f   vScale = { 1, 1 };
         koi::Sprite*    pDrawTarget = nullptr;
         uint32_t        nResID = 0;
-        koi::Pixel      tint = koi::WHITE;
+        koi::Color      tint = Color::WHITE;
         std::function<void()> funcHook = nullptr;
         
         
@@ -419,61 +366,6 @@ namespace koi {
 #undef KOI_PGE_APPLICATION
 
 
-// +------------------------------------------------------------------------------+
-// | koiPixelGameEngine INTERFACE IMPLEMENTATION (CORE)                           |
-// | Note: The core implementation is platform independent                        |
-// +------------------------------------------------------------------------------+
-// MARK: koi::Pixel impl;
-namespace koi {
-    Pixel::Pixel() { r = 0; g = 0; b = 0; a = nDefaultAlpha; }
-    
-    Pixel::Pixel(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
-        n = red | (green << 8) | (blue << 16) | (alpha << 24);
-    } // Thanks jarekpelczar
-    
-    Pixel::Pixel(uint32_t p) { n = p; }
-    
-    bool Pixel::operator==(const Pixel& p) const { return n == p.n; }
-    
-    bool Pixel::operator!=(const Pixel& p) const { return n != p.n; }
-    
-    Pixel PixelF(float red, float green, float blue, float alpha) {
-        return Pixel(uint8_t(red * 255.0f), uint8_t(green * 255.0f), uint8_t(blue * 255.0f), uint8_t(alpha * 255.0f));
-    }
-}
-
-
-// MARK: koi::Sprite impl;
-namespace koi {
-    Sprite::Sprite(int32_t w, int32_t h) {
-        if (pColData) delete[] pColData;
-        width = w;    height = h;
-        pColData = new Pixel[width * height];
-        for (int32_t i = 0; i < width * height; i++) pColData[i] = Pixel();
-    }
-    
-    Sprite::~Sprite() { if (pColData) delete[] pColData; }
-    Pixel Sprite::GetPixel(const koi::Vector2i& a) const { return GetPixel(a.x, a.y); }
-    
-    bool Sprite::SetPixel(const koi::Vector2i& a, Pixel p) { return SetPixel(a.x, a.y, p); }
-
-    Pixel Sprite::GetPixel(int32_t x, int32_t y) const {
-        return (modeSample == koi::Sprite::Mode::NORMAL) ? ((x >= 0 && x < width && y >= 0 && y < height) ? pColData[y * width + x] : BLANK) : pColData[abs(y%height)*width + abs(x%width)];
-    }
-    
-    bool Sprite::SetPixel(int32_t x, int32_t y, Pixel p) {
-        if (x >= 0 && x < width && y >= 0 && y < height) {
-            pColData[y * width + x] = p;
-            return true;
-        }
-        return false;
-    }
-    
-    Pixel* Sprite::GetData() { return pColData; }
-    
-}
-
-
 // MARK: koi::PixelGameEngine impl;
 namespace koi {
     PixelGameEngine::PixelGameEngine() {
@@ -511,9 +403,9 @@ namespace koi {
         delete pDrawTarget; // Erase existing window sprites
         pDrawTarget = new Sprite(vScreenSize.x, vScreenSize.y);
         
-        renderer->ClearBuffer(koi::BLACK, true);
+        renderer->ClearBuffer(koi::BACK, true);
         renderer->DisplayFrame();
-        renderer->ClearBuffer(koi::BLACK, true);
+        renderer->ClearBuffer(koi::BACK, true);
         renderer->UpdateViewport(vViewPos, vViewSize);
     }
     
@@ -546,7 +438,7 @@ namespace koi {
     void PixelGameEngine::SetWindowOffset(float x, float y) { vOffset = { x, y }; }
     void PixelGameEngine::SetWindowScale(const koi::Vector2f& scale) { SetWindowScale(scale.x, scale.y); }
     void PixelGameEngine::SetWindowScale(float x, float y) { vScale = { x, y }; }
-    void PixelGameEngine::SetWindowTint(const koi::Pixel& t_tint) { tint = t_tint; }
+    void PixelGameEngine::SetWindowTint(const koi::Color& t_tint) { tint = t_tint; }
     void PixelGameEngine::SetWindowCustomRenderFunction(std::function<void()> f) { funcHook = f; }
     
     Sprite* PixelGameEngine::GetDrawTarget() const { return pDrawTarget; }
@@ -569,29 +461,29 @@ namespace koi {
     const koi::Vector2i& PixelGameEngine::GetScreenPixelSize() const { return vScreenPixelSize; }
     const koi::Vector2i& PixelGameEngine::GetWindowMouse() const { return vMouseWindowPos; }
     
-    bool PixelGameEngine::Draw(const koi::Vector2i& pos, Pixel p) { return Draw(pos.x, pos.y, p); }
+    bool PixelGameEngine::Draw(const koi::Vector2i& pos, Color p) { return Draw(pos.x, pos.y, p); }
     
     // This is it, the critical function that plots a pixel
-    bool PixelGameEngine::Draw(int32_t x, int32_t y, Pixel p) {
+    bool PixelGameEngine::Draw(int32_t x, int32_t y, Color p) {
         if (!pDrawTarget) return false;
-        if (nPixelMode == Pixel::NORMAL) return pDrawTarget->SetPixel(x, y, p);
-        if (nPixelMode == Pixel::MASK) if (p.a == 255) return pDrawTarget->SetPixel(x, y, p);
-        if (nPixelMode == Pixel::ALPHA) {
-            Pixel d = pDrawTarget->GetPixel(x, y);
+        if (nColorMode == Color::NORMAL) return pDrawTarget->SetPixel(x, y, p);
+        if (nColorMode == Color::MASK) if (p.a == 255) return pDrawTarget->SetPixel(x, y, p);
+        if (nColorMode == Color::ALPHA) {
+            Color d = pDrawTarget->GetPixel(x, y);
             float a = (float)(p.a / 255.0f) * fBlendFactor;
             float c = 1.0f - a;
             float r = a * (float)p.r + c * (float)d.r;
             float g = a * (float)p.g + c * (float)d.g;
             float b = a * (float)p.b + c * (float)d.b;
-            return pDrawTarget->SetPixel(x, y, Pixel((uint8_t)r, (uint8_t)g, (uint8_t)b/*, (uint8_t)(p.a * fBlendFactor)*/));
+            return pDrawTarget->SetPixel(x, y, Color((uint8_t)r, (uint8_t)g, (uint8_t)b/*, (uint8_t)(p.a * fBlendFactor)*/));
         }
-        if (nPixelMode == Pixel::CUSTOM) return pDrawTarget->SetPixel(x, y, funcPixelMode(x, y, p, pDrawTarget->GetPixel(x, y)));
+        if (nColorMode == Color::CUSTOM) return pDrawTarget->SetPixel(x, y, funcPixelMode(x, y, p, pDrawTarget->GetPixel(x, y)));
         return false;
     }
     
-    void PixelGameEngine::FillTriangle(const koi::Vector2i& pos1, const koi::Vector2i& pos2, const koi::Vector2i& pos3, Pixel p) { FillTriangle(pos1.x, pos1.y, pos2.x, pos2.y, pos3.x, pos3.y, p); }
+    void PixelGameEngine::FillTriangle(const koi::Vector2i& pos1, const koi::Vector2i& pos2, const koi::Vector2i& pos3, Color p) { FillTriangle(pos1.x, pos1.y, pos2.x, pos2.y, pos3.x, pos3.y, p); }
     
-    void PixelGameEngine::FillTriangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, Pixel p) {
+    void PixelGameEngine::FillTriangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, Color p) {
         auto drawline = [&](int sx, int ex, int ny) { for (int i = sx; i <= ex; i++) Draw(i, ny, p); };
 
         int t1x, t2x, y, minx, maxx, t1xp, t2xp;
@@ -732,19 +624,19 @@ namespace koi {
         }
     }
     
-    void PixelGameEngine::Clear(Pixel p) {
+    void PixelGameEngine::Clear(Color p) {
         int pixels = GetDrawTargetWidth() * GetDrawTargetHeight();
-        Pixel* m = GetDrawTarget()->GetData();
+        Color* m = GetDrawTarget()->GetData();
         for (int i = 0; i < pixels; i++) m[i] = p;
     }
     
-    void PixelGameEngine::ClearBuffer(Pixel p, bool bDepth) { renderer->ClearBuffer(p, bDepth); }
-    void PixelGameEngine::SetPixelMode(Pixel::Mode m) { nPixelMode = m; }
-    Pixel::Mode PixelGameEngine::GetPixelMode() { return nPixelMode; }
+    void PixelGameEngine::ClearBuffer(Color p, bool bDepth) { renderer->ClearBuffer(p, bDepth); }
+    void PixelGameEngine::SetPixelMode(Color::Mode m) { nColorMode = m; }
+    Color::Mode PixelGameEngine::GetPixelMode() { return nColorMode; }
     
-    void PixelGameEngine::SetPixelMode(std::function<koi::Pixel(const int x, const int y, const koi::Pixel&, const koi::Pixel&)> pixelMode) {
+    void PixelGameEngine::SetPixelMode(std::function<koi::Color(const int x, const int y, const koi::Color&, const koi::Color&)> pixelMode) {
         funcPixelMode = pixelMode;
-        nPixelMode = Pixel::Mode::CUSTOM;
+        nColorMode = Color::Mode::CUSTOM;
     }
     
     void PixelGameEngine::SetPixelBlend(float fBlend) {
@@ -899,7 +791,7 @@ namespace koi {
         
         // Display Frame
         renderer->UpdateViewport(vViewPos, vViewSize);
-        renderer->ClearBuffer(koi::BLACK, true);
+        renderer->ClearBuffer(Color::BLACK, true);
         
         renderer->PrepareDrawing();
         
@@ -1123,7 +1015,7 @@ namespace koi {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         }
         
-        void DrawWindowQuad(const koi::Vector2f& offset, const koi::Vector2f& scale, const koi::Pixel tint) override {
+        void DrawWindowQuad(const koi::Vector2f& offset, const koi::Vector2f& scale, const koi::Color tint) override {
             glBegin(GL_QUADS);
             glColor4ub(tint.r, tint.g, tint.b, tint.a);
             glTexCoord2f(0.0f * scale.x + offset.x, 1.0f * scale.y + offset.y);
@@ -1165,7 +1057,7 @@ namespace koi {
             glBindTexture(GL_TEXTURE_2D, id);
         }
         
-        void ClearBuffer(koi::Pixel p, bool bDepth) override {
+        void ClearBuffer(koi::Color p, bool bDepth) override {
             glClearColor(float(p.r) / 255.0f, float(p.g) / 255.0f, float(p.b) / 255.0f, float(p.a) / 255.0f);
             glClear(GL_COLOR_BUFFER_BIT);
             if (bDepth) glClear(GL_DEPTH_BUFFER_BIT);

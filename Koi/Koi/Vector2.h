@@ -11,8 +11,6 @@
 #include <math.h>
 
 namespace koi {
-    
-    
     template<class T>
     struct Vector2 {
         static const Vector2 ZERO, X_AXIS, Y_AXIS;
