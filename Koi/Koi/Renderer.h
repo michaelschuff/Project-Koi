@@ -32,6 +32,7 @@
             virtual void       ApplyTexture(uint32_t id) = 0;
             virtual void       UpdateViewport(const koi::Vector2i& pos, const koi::Vector2i& size) = 0;
             virtual void       ClearBuffer(koi::Color p, bool bDepth) = 0;
+            
             static koi::KoiEngine* ptrPGE;
         };
     }

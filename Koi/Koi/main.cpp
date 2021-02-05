@@ -9,7 +9,6 @@ public:
 
 public:
     bool OnUserCreate() override {
-        
         return true;
     }
 

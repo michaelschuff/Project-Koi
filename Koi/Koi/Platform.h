@@ -6,7 +6,7 @@
 //
 
 #ifndef Platform_h
-#define Platform_h
+    #define Platform_h
     #include "Global.h"
 
     namespace koi {
@@ -29,6 +29,4 @@
             static koi::KoiEngine* ptrPGE;
         };
     }
-    
-
 #endif /* Platform_h */

@@ -178,27 +178,26 @@
                 static LRESULT CALLBACK koi_WindowEvent(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
                     switch (uMsg) {
                         case WM_MOUSEMOVE: {
-                            // Thanks @ForAbby (Discord)
                             uint16_t x = lParam & 0xFFFF; uint16_t y = (lParam >> 16) & 0xFFFF;
                             int16_t ix = *(int16_t*)&x;   int16_t iy = *(int16_t*)&y;
                             ptrPGE->koi_UpdateMouse(ix, iy);
                             return 0;
                         }
-                        case WM_SIZE:       ptrPGE->koi_UpdateWindowSize(lParam & 0xFFFF, (lParam >> 16) & 0xFFFF); return 0;
-                        case WM_MOUSEWHEEL: ptrPGE->koi_UpdateMouseWheel(GET_WHEEL_DELTA_WPARAM(wParam));           return 0;
-                        case WM_MOUSELEAVE: ptrPGE->koi_UpdateMouseFocus(false);                                    return 0;
-                        case WM_SETFOCUS: ptrPGE->koi_UpdateKeyFocus(true);                                       return 0;
-                        case WM_KILLFOCUS:  ptrPGE->koi_UpdateKeyFocus(false);                                      return 0;
-                        case WM_KEYDOWN:  ptrPGE->koi_UpdateKeyState(mapKeys[wParam], true);                      return 0;
-                        case WM_KEYUP:    ptrPGE->koi_UpdateKeyState(mapKeys[wParam], false);                     return 0;
-                        case WM_LBUTTONDOWN:ptrPGE->koi_UpdateMouseState(0, true);                                  return 0;
-                        case WM_LBUTTONUP:  ptrPGE->koi_UpdateMouseState(0, false);                                 return 0;
-                        case WM_RBUTTONDOWN:ptrPGE->koi_UpdateMouseState(1, true);                                  return 0;
-                        case WM_RBUTTONUP:  ptrPGE->koi_UpdateMouseState(1, false);                                 return 0;
-                        case WM_MBUTTONDOWN:ptrPGE->koi_UpdateMouseState(2, true);                                  return 0;
-                        case WM_MBUTTONUP:  ptrPGE->koi_UpdateMouseState(2, false);                                 return 0;
-                        case WM_CLOSE:    ptrPGE->koi_Terminate();                                                return 0;
-                        case WM_DESTROY:  PostQuitMessage(0); DestroyWindow(hWnd);                return 0;
+                        case WM_SIZE:        ptrPGE->koi_UpdateWindowSize(lParam & 0xFFFF, (lParam >> 16) & 0xFFFF); return 0;
+                        case WM_MOUSEWHEEL:  ptrPGE->koi_UpdateMouseWheel(GET_WHEEL_DELTA_WPARAM(wParam));           return 0;
+                        case WM_MOUSELEAVE:  ptrPGE->koi_UpdateMouseFocus(false);                                    return 0;
+                        case WM_SETFOCUS:    ptrPGE->koi_UpdateKeyFocus(true);                                       return 0;
+                        case WM_KILLFOCUS:   ptrPGE->koi_UpdateKeyFocus(false);                                      return 0;
+                        case WM_KEYDOWN:     ptrPGE->koi_UpdateKeyState(mapKeys[wParam], true);                      return 0;
+                        case WM_KEYUP:       ptrPGE->koi_UpdateKeyState(mapKeys[wParam], false);                     return 0;
+                        case WM_LBUTTONDOWN: ptrPGE->koi_UpdateMouseState(0, true);                                  return 0;
+                        case WM_LBUTTONUP:   ptrPGE->koi_UpdateMouseState(0, false);                                 return 0;
+                        case WM_RBUTTONDOWN: ptrPGE->koi_UpdateMouseState(1, true);                                  return 0;
+                        case WM_RBUTTONUP:   ptrPGE->koi_UpdateMouseState(1, false);                                 return 0;
+                        case WM_MBUTTONDOWN: ptrPGE->koi_UpdateMouseState(2, true);                                  return 0;
+                        case WM_MBUTTONUP:   ptrPGE->koi_UpdateMouseState(2, false);                                 return 0;
+                        case WM_CLOSE:       ptrPGE->koi_Terminate();                                                return 0;
+                        case WM_DESTROY:     PostQuitMessage(0); DestroyWindow(hWnd);                                return 0;
                     }
                     return DefWindowProc(hWnd, uMsg, wParam, lParam);
                 }

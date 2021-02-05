@@ -60,10 +60,8 @@ namespace koi {
         friend std::ostream& operator << (std::ostream& os, const Vector3& rhs) { os << rhs.str(); return os; }
         
         operator Vector3<int32_t>() const;
-        operator Vector3<float>()   const;
-        operator Vector3<double>()  const;
-        
-        
+        operator Vector3<float>  () const;
+        operator Vector3<double> () const;
     };
     
     template<class T> Quaternion<T> operator + (const T& k, const Vector3<T>& v);
