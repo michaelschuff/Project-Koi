@@ -116,7 +116,7 @@ namespace koi {
     { return { static_cast<int32_t>(this->w), static_cast<int32_t>(this->x), static_cast<int32_t>(this->y), static_cast<int32_t>(this->z) }; }
     template<class T> Quaternion<T>::operator Quaternion<float>()   const
     { return { static_cast<float>  (this->w), static_cast<float>  (this->x), static_cast<float>  (this->y), static_cast<float>  (this->z) }; }
-    template<class T> Quaternion<T>::operator Quaternion<double>() const
+    template<class T> Quaternion<T>::operator Quaternion<double>()  const
     { return { static_cast<double> (this->w), static_cast<double> (this->x), static_cast<double> (this->y), static_cast<double> (this->z) }; }
     
     template<class T> inline Quaternion<T> operator * (const float&  lhs, const Quaternion<T>& rhs)
@@ -139,8 +139,8 @@ namespace koi {
     
     
     
-    template<class T> Quaternion<T> Vector3<T>::operator + (const T& k) const { return { k, *this }; }
-    template<class T> Quaternion<T> operator + (const T& k, const Vector3<T>& v) { return { k, v }; }
+    template<class T> Quaternion<T> Vector3<T>::operator + (const T& k) const                { return { k, *this }; }
+    template<class T> Quaternion<T>             operator + (const T& k, const Vector3<T>& v) { return { k, v     }; }
     
     template<class T> void       Vector3<T>::rotate (const Quaternion<T>& q)                                           { *this = (q * (0 + *this) * q.conjugate()).v(); }
     template<class T> void       Vector3<T>::rotate (const Vector3& axis,   const T& theta)                            { rotate(GetQuaternion(axis, theta)); }

@@ -20,20 +20,19 @@
         class Renderer {
         public:
             virtual ~Renderer() = default;
-            virtual void       PrepareDevice() = 0;
-            virtual koi::rcode CreateDevice(std::vector<void*> params, bool bFullScreen, bool bVSYNC) = 0;
-            virtual koi::rcode DestroyDevice() = 0;
-            virtual void       DisplayFrame() = 0;
-            virtual void       PrepareDrawing() = 0;
-            virtual void       DrawWindowQuad(const koi::Vector2f& offset, const koi::Vector2f& scale, const koi::Color tint) = 0;
-            virtual uint32_t   CreateTexture(const uint32_t width, const uint32_t height) = 0;
-            virtual void       UpdateTexture(uint32_t id, koi::Sprite* spr) = 0;
-            virtual uint32_t   DeleteTexture(const uint32_t id) = 0;
-            virtual void       ApplyTexture(uint32_t id) = 0;
-            virtual void       UpdateViewport(const koi::Vector2i& pos, const koi::Vector2i& size) = 0;
-            virtual void       ClearBuffer(koi::Color p, bool bDepth) = 0;
-            
-            static koi::KoiEngine* ptrPGE;
+            virtual void            PrepareDevice ()                                                                               = 0;
+            virtual koi::rcode      CreateDevice  (std::vector<void*>   params, bool  bFullScreen,          bool bVSYNC)           = 0;
+            virtual koi::rcode      DestroyDevice ()                                                                               = 0;
+            virtual void            DisplayFrame  ()                                                                               = 0;
+            virtual void            PrepareDrawing()                                                                               = 0;
+            virtual void            DrawWindowQuad(const koi::Vector2f& offset, const koi::Vector2f& scale, const koi::Color tint) = 0;
+            virtual uint32_t        CreateTexture (const uint32_t       width , const uint32_t       height)                       = 0;
+            virtual void            UpdateTexture (      uint32_t id,                 koi::Sprite*   spr)                          = 0;
+            virtual uint32_t        DeleteTexture (const uint32_t id)                                                              = 0;
+            virtual void            ApplyTexture  (      uint32_t id)                                                              = 0;
+            virtual void            UpdateViewport(const koi::Vector2i& pos   , const koi::Vector2i& size)                         = 0;
+            virtual void            ClearBuffer   (koi::Color           p     , bool bDepth)                                       = 0;
+            static  koi::KoiEngine* ptrPGE;
         };
     }
     
@@ -51,9 +50,9 @@
             #include <GL/gl.h>
             #pragma comment(lib, "Dwmapi.lib")
             typedef BOOL(WINAPI wglSwapInterval_t) (int interval);
-            static wglSwapInterval_t* wglSwapInterval = nullptr;
-            typedef HDC glDeviceContext_t;
-            typedef HGLRC glRenderContext_t;
+            static  wglSwapInterval_t* wglSwapInterval = nullptr;
+            typedef HDC                glDeviceContext_t;
+            typedef HGLRC              glRenderContext_t;
         #endif
 
         #if defined(__linux__) || defined(__FreeBSD__)
@@ -65,9 +64,9 @@
             }
 
             typedef int(glSwapInterval_t)(X11::Display* dpy, X11::GLXDrawable drawable, int interval);
-            static glSwapInterval_t* glSwapIntervalEXT;
-            typedef X11::GLXContext glDeviceContext_t;
-            typedef X11::GLXContext glRenderContext_t;
+            static  glSwapInterval_t* glSwapIntervalEXT;
+            typedef X11::GLXContext   glDeviceContext_t;
+            typedef X11::GLXContext   glRenderContext_t;
         #endif
 
         #if defined(__APPLE__)
@@ -91,8 +90,8 @@
                 bool bSync = false;
             
                 #if defined(__linux__) || defined(__FreeBSD__)
-                    X11::Display* koi_Display = nullptr;
-                    X11::Window* koi_Window = nullptr;
+                    X11::Display*     koi_Display    = nullptr;
+                    X11::Window*      koi_Window     = nullptr;
                     X11::XVisualInfo* koi_VisualInfo = nullptr;
                 #endif
             
@@ -102,16 +101,13 @@
                         //glutInit has to be called with main() arguments, make fake ones
                         int argc = 0;
                         char* argv[1] = { (char*)"" };
-                        glutInit(&argc, argv);
                         
+                        glutInit(&argc, argv);
                         glutInitWindowPosition(0, 0);
                         glutInitWindowSize(512, 512);
-                        
                         glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGBA);
                         
-                        // Creates the window and the OpenGL context for it
-                        glutCreateWindow("OneLoneCoder.com - Pixel Game Engine");
-                        
+                        glutCreateWindow(""); // Creates the window and the OpenGL context for it
                         glEnable(GL_TEXTURE_2D); // Turn on texturing
                         glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
                     #endif
@@ -121,8 +117,7 @@
                     #if defined(_WIN32)
                         // Create Device Context
                         glDeviceContext = GetDC((HWND)(params[0]));
-                        PIXELFORMATDESCRIPTOR pfd =
-                        {
+                        PIXELFORMATDESCRIPTOR pfd = {
                             sizeof(PIXELFORMATDESCRIPTOR), 1,
                             PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,
                             PFD_TYPE_RGBA, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -160,21 +155,18 @@
                         glSwapIntervalEXT = nullptr;
                         glSwapIntervalEXT = (glSwapInterval_t*)glXGetProcAddress((unsigned char*)"glXSwapIntervalEXT");
                         
-                        if (glSwapIntervalEXT == nullptr && !bVSYNC)
-                        {
+                        if (glSwapIntervalEXT == nullptr && !bVSYNC) {
                             printf("NOTE: Could not disable VSYNC, glXSwapIntervalEXT() was not found!\n");
                             printf("      Don't worry though, things will still work, it's just the\n");
-                            printf("      frame rate will be capped to your monitors refresh rate - javidx9\n");
+                            printf("      frame rate will be capped to your monitors refresh rate\n");
                         }
                         
-                        if (glSwapIntervalEXT != nullptr && !bVSYNC)
-                            glSwapIntervalEXT(koi_Display, *koi_Window, 0);
+                        if (glSwapIntervalEXT != nullptr && !bVSYNC) glSwapIntervalEXT(koi_Display, *koi_Window, 0);
                     #endif
                 
                     #if defined(__APPLE__)
                         mFullScreen = bFullScreen;
-                        if (!bVSYNC)
-                        {
+                        if (!bVSYNC) {
                             GLint sync = 0;
                             CGLContextObj ctx = CGLGetCurrentContext();
                             if (ctx) CGLSetParameter(ctx, kCGLCPSwapInterval, &sync);
@@ -205,7 +197,7 @@
                 void DisplayFrame() override {
                     #if defined(_WIN32)
                         SwapBuffers(glDeviceContext);
-                        if (bSync) DwmFlush(); // Woooohooooooo!!!! SMOOOOOOOTH!
+                        if (bSync) DwmFlush();
                     #endif
                 
                     #if defined(__linux__) || defined(__FreeBSD__)
@@ -217,10 +209,7 @@
                     #endif
                 }
             
-                void PrepareDrawing() override {
-                    glEnable(GL_BLEND);
-                    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-                }
+                void PrepareDrawing() override { glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); }
             
                 void DrawWindowQuad(const koi::Vector2f& offset, const koi::Vector2f& scale, const koi::Color tint) override {
                     glBegin(GL_QUADS);
@@ -250,19 +239,14 @@
                     return id;
                 }
             
-                uint32_t DeleteTexture(const uint32_t id) override {
-                    glDeleteTextures(1, &id);
-                    return id;
-                }
+                uint32_t DeleteTexture(const uint32_t id) override { glDeleteTextures(1, &id); return id; }
             
                 void UpdateTexture(uint32_t id, koi::Sprite* spr) override {
                     UNUSED(id);
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, spr->width, spr->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, spr->GetData());
                 }
             
-                void ApplyTexture(uint32_t id) override {
-                    glBindTexture(GL_TEXTURE_2D, id);
-                }
+                void ApplyTexture(uint32_t id) override { glBindTexture(GL_TEXTURE_2D, id); }
             
                 void ClearBuffer(koi::Color p, bool bDepth) override {
                     glClearColor(float(p.r) / 255.0f, float(p.g) / 255.0f, float(p.b) / 255.0f, float(p.a) / 255.0f);

@@ -158,7 +158,7 @@
             #include <GL/gl.h>
             #pragma comment(lib, "Dwmapi.lib")
             typedef BOOL(WINAPI wglSwapInterval_t) (int interval);
-            static wglSwapInterval_t* wglSwapInterval = nullptr;
+            static  wglSwapInterval_t* wglSwapInterval = nullptr;
             typedef HDC glDeviceContext_t;
             typedef HGLRC glRenderContext_t;
         #endif
@@ -172,9 +172,9 @@
             }
 
             typedef int(glSwapInterval_t)(X11::Display* dpy, X11::GLXDrawable drawable, int interval);
-            static glSwapInterval_t* glSwapIntervalEXT;
-            typedef X11::GLXContext glDeviceContext_t;
-            typedef X11::GLXContext glRenderContext_t;
+            static  glSwapInterval_t* glSwapIntervalEXT;
+            typedef X11::GLXContext   glDeviceContext_t;
+            typedef X11::GLXContext   glRenderContext_t;
         #endif
 
         #if defined(__APPLE__)

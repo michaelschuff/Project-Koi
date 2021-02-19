@@ -22,197 +22,201 @@
         public:
             KoiEngine();
             virtual ~KoiEngine();
-        public:
-            rcode Construct(int32_t screen_w, int32_t screen_h, int32_t pixel_w, int32_t pixel_h,
-                                 bool full_screen = false, bool vsync = false, bool cohesion = false);
+        
+            
+            
+            rcode Construct(int32_t screen_w, int32_t screen_h,
+                            int32_t pixel_w,  int32_t pixel_h,
+                            bool full_screen = false,
+                            bool vsync = false,
+                            bool cohesion = false);
+            
             rcode Start();
             
-        public: // User Override Interfaces
-            virtual bool OnUserCreate();                    // Called once on application startup, use to load your resources
-            virtual bool OnUserUpdate(float fElapsedTime);  // Called every frame, and provides you with a time per frame value
-            virtual bool OnUserDestroy();                   // Called once on application termination, so you can be one clean coder
             
-        public: // Hardware Interfaces
-                
-            bool IsFocused() const;                         // Returns true if window is currently in focus
-            HWButton GetKey(Key k) const;                   // Get the state of a specific keyboard button
-            HWButton GetMouse(uint32_t b) const;            // Get the state of a specific mouse button
-            int32_t GetMouseX() const;                      // Get Mouse X coordinate in "pixel" space
-            int32_t GetMouseY() const;                      // Get Mouse Y coordinate in "pixel" space
-            int32_t GetMouseWheel() const;                  // Get Mouse Wheel Delta
-            const Vector2i& GetWindowMouse() const;    // Get the mouse in window space
-            const Vector2i& GetMousePos() const;       // Gets the mouse as a vector to keep Tarriest happy
             
-        public: // Utility
-            Color* pColData = nullptr;
-            Color::Mode modeSample = Color::Mode::NORMAL;
+            // User Override Interfaces
+            virtual bool OnUserCreate ();                           // Called once on application startup, use to load your resources
+            virtual bool OnUserUpdate (float fElapsedTime);         // Called every frame, and provides you with a time per frame value
+            virtual bool OnUserDestroy();                           // Called once on application termination
             
-            int32_t ScreenWidth() const;                        // Returns the width of the screen in "pixels"
-            int32_t ScreenHeight() const;                       // Returns the height of the screen in "pixels"
-            int32_t GetDrawTargetWidth() const;                 // Returns the width of the currently selected drawing target in "pixels"
-            int32_t GetDrawTargetHeight() const;                // Returns the height of the currently selected drawing target in "pixels"
-            Sprite* GetDrawTarget() const;                 // Returns the currently active draw target
-            void SetScreenSize(int w, int h);                   // Resize the primary screen sprite
-            uint32_t GetFPS() const;                            // Gets the current Frames Per Second
-            float GetElapsedTime() const;                       // Gets last update of elapsed time
-            const Vector2i& GetWindowSize() const;         // Gets Actual Window size
-            const Vector2i& GetPixelSize() const;          // Gets pixel scale
-            const Vector2i& GetScreenPixelSize() const;    // Gets actual pixel scale
             
-        public: // CONFIGURATION ROUTINES
+            
+            // Hardware Interfaces
+            bool            IsFocused           ()           const; // Returns true if window is currently in focus
+            HWButton        GetKey              (Key k)      const; // Get the state of a specific keyboard button
+            HWButton        GetMouse            (uint32_t b) const; // Get the state of a specific mouse button
+            int32_t         GetMouseX           ()           const; // Get Mouse X coordinate in "pixel" space
+            int32_t         GetMouseY           ()           const; // Get Mouse Y coordinate in "pixel" space
+            int32_t         GetMouseWheel       ()           const; // Get Mouse Wheel Delta
+            const Vector2i& GetWindowMouse      ()           const; // Get the mouse in window space
+            const Vector2i& GetMousePos         ()           const; // Gets the mouse as a vector
+            
+            
+            
+            // Utility
+            int32_t         ScreenWidth         ()           const; // Returns the width of the screen in "pixels"
+            int32_t         ScreenHeight        ()           const; // Returns the height of the screen in "pixels"
+            int32_t         GetDrawTargetWidth  ()           const; // Returns the width of the currently selected drawing target in "pixels"
+            int32_t         GetDrawTargetHeight ()           const; // Returns the height of the currently selected drawing target in "pixels"
+            Sprite*         GetDrawTarget       ()           const; // Returns the currently active draw target
+            void            SetScreenSize       (int w, int h);     // Resize the primary screen sprite
+            uint32_t        GetFPS              ()           const; // Gets the current Frames Per Second
+            float           GetElapsedTime      ()           const; // Gets last update of elapsed time
+            const Vector2i& GetWindowSize       ()           const; // Gets Actual Window size
+            const Vector2i& GetPixelSize        ()           const; // Gets pixel scale
+            const Vector2i& GetScreenPixelSize  ()           const; // Gets actual pixel scale
+            
+            
+            
+            // CONFIGURATION ROUTINES
+            
             // window targeting functions
-            void EnableWindow(bool b);
-            void SetWindowOffset(const Vector2f& offset);
-            void SetWindowOffset(float x, float y);
-            void SetWindowScale(const Vector2f& scale);
-            void SetWindowScale(float x, float y);
-            void SetWindowTint(const Color& tint);
+            void EnableWindow       (bool b);
+            void SetWindowOffset    (const Vector2f& offset);
+            void SetWindowOffset    (float x, float y);
+            void SetWindowScale     (const Vector2f& scale);
+            void SetWindowScale     (float x, float y);
+            void SetWindowTint      (const Color& tint);
             void SetWindowCustomRenderFunction(std::function<void()> f);
             
             
-            // Change the pixel mode for different optimisations
+            // Pixel modes:
             // Color::NORMAL = No transparency
             // Color::MASK   = Transparent if alpha is < 255
             // Color::ALPHA  = Full transparency
-            void SetPixelMode(Color::Mode m);
+            void        SetPixelMode(Color::Mode m);
             Color::Mode GetPixelMode();
-            void SetPixelMode(std::function<Color(const int x, const int y, const Color& pSource, const Color& pDest)> pixelMode);   // Use a custom blend function
-            void SetPixelBlend(float fBlend);   // Change the blend factor form between 0.0f to 1.0f;
+            void        SetPixelMode(std::function<Color(const int x, const int y, const Color& pSource, const Color& pDest)> pixelMode); // Custom blend function
+            void        SetPixelBlend(float fBlend);   // Change the blend factor form between 0.0f to 1.0f;
             
             
             
-        public: // DRAWING ROUTINES
-            virtual bool Draw     (int32_t x, int32_t y, Color p = Color::WHITE);
-            bool Draw             (const Vector2i& pos, Color p = Color::WHITE);
+            // DRAWING ROUTINES
+            virtual bool Draw     (int32_t x, int32_t y,   Color p = Color::WHITE);
+                    bool Draw     (const Vector2i& pos,    Color p = Color::WHITE);
             
             void DrawLine         (int32_t x1, int32_t y1, int32_t x2, int32_t y2, Color p = Color::WHITE, uint32_t pattern = 0xFFFFFFFF);
             void DrawLine         (const Vector2i& p1,     const Vector2i& p2,     Color p = Color::WHITE, uint32_t pattern = 0xFFFFFFFF);
             
-            void DrawCircle       (int32_t x, int32_t y, int32_t radius, Color c = Color::WHITE, uint8_t mask = 0xFF);
-            void DrawCircle       (const Vector2i& p,    int32_t radius, Color c = Color::WHITE, uint8_t mask = 0xFF);
-            void FillCircle       (int32_t x, int32_t y, int32_t radius, Color c = Color::WHITE);
-            void FillCircle       (const Vector2i& p,    int32_t radius, Color c = Color::WHITE);
+            void DrawCircle       (int32_t x, int32_t y,   int32_t radius, Color c = Color::WHITE, uint8_t mask = 0xFF);
+            void DrawCircle       (const Vector2i& p,      int32_t radius, Color c = Color::WHITE, uint8_t mask = 0xFF);
+            void FillCircle       (int32_t x, int32_t y,   int32_t radius, Color c = Color::WHITE);
+            void FillCircle       (const Vector2i& p,      int32_t radius, Color c = Color::WHITE);
             
-            void DrawRect         (int32_t x, int32_t y, int32_t w, int32_t h, Color c = Color::WHITE);
-            void DrawRect         (const Vector2i& p,    const Vector2i& size, Color c = Color::WHITE);
-            void FillRect         (int32_t x, int32_t y, int32_t w, int32_t h, Color c = Color::WHITE);
-            void FillRect         (const Vector2i& p,    const Vector2i& size, Color c = Color::WHITE);
+            void DrawRect         (int32_t x, int32_t y,   int32_t w, int32_t h,   Color c = Color::WHITE);
+            void DrawRect         (const Vector2i& p,      const Vector2i& size,   Color c = Color::WHITE);
+            void FillRect         (int32_t x, int32_t y,   int32_t w, int32_t h,   Color c = Color::WHITE);
+            void FillRect         (const Vector2i& p,      const Vector2i& size,   Color c = Color::WHITE);
             
             void DrawTriangle     (int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, Color c = Color::WHITE);
             void DrawTriangle     (const Vector2i& p1,     const Vector2i& p2,     const Vector2i& p3,     Color c = Color::WHITE);
             void FillTriangle     (int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, Color c = Color::WHITE);
             void FillTriangle     (const Vector2i& p1,     const Vector2i& p2,     const Vector2i& p3,     Color c = Color::WHITE);
             
-            void DrawSprite       (int32_t x, int32_t y, Sprite* sprite, uint32_t scale = 1, uint8_t flip = Sprite::NONE);
-            void DrawSprite       (const Vector2i& p,    Sprite* sprite, uint32_t scale = 1, uint8_t flip = Sprite::NONE);
-            void DrawPartialSprite(int32_t x, int32_t y, Sprite* sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale = 1, uint8_t flip = Sprite::NONE);
-            void DrawPartialSprite(const Vector2i& p,    Sprite* sprite, const Vector2i& origin, const Vector2i& size, uint32_t scale = 1, uint8_t flip = Sprite::NONE);
+            void DrawSprite       (int32_t x, int32_t y,   Sprite* sprite, uint32_t scale = 1, uint8_t flip = Sprite::NONE);
+            void DrawSprite       (const Vector2i& p,      Sprite* sprite, uint32_t scale = 1, uint8_t flip = Sprite::NONE);
+            void DrawPartialSprite(int32_t x, int32_t y,   Sprite* sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale = 1, uint8_t flip = Sprite::NONE);
+            void DrawPartialSprite(const Vector2i& p,      Sprite* sprite, const Vector2i& origin, const Vector2i& size, uint32_t scale = 1, uint8_t flip = Sprite::NONE);
             void Clear(Color c);
             void ClearBuffer(Color c, bool bDepth = true);  // Clears the rendering back buffer
             
             
-        public: // Branding
+            // Branding
             std::string sAppName;
             
-        private: // Inner mysterious workings
-            Color::Mode     nColorMode = Color::NORMAL;
-            float           fBlendFactor = 1.0f;
-            Vector2i   vScreenSize = { 256, 240 };
-            Vector2f   vInvScreenSize = { 1.0f / 256.0f, 1.0f / 240.0f };
-            Vector2i   vPixelSize = { 4, 4 };
-            Vector2i   vScreenPixelSize = { 4, 4 };
-            Vector2i   vMousePos = { 0, 0 };
-            int32_t         nMouseWheelDelta = 0;
-            Vector2i   vMousePosCache = { 0, 0 };
-            Vector2i   vMouseWindowPos = { 0, 0 };
-            int32_t         nMouseWheelDeltaCache = 0;
-            Vector2i   vWindowSize = { 0, 0 };
-            Vector2i   vViewPos = { 0, 0 };
-            Vector2i   vViewSize = { 0,0 };
-            bool            bFullScreen = false;
-            Vector2f   vPixel = { 1.0f, 1.0f };
-            bool            bHasInputFocus = false;
-            bool            bHasMouseFocus = false;
-            bool            bEnableVSYNC = false;
-            float           fFrameTimer = 1.0f;
-            float           fLastElapsed = 0.0f;
-            int             nFrameCount = 0;
-            uint32_t        nLastFPS = 0;
-            bool            bPixelCohesion = false;
+            // Inner workings
+            Color::Mode nColorMode              = Color::NORMAL;
+            float       fBlendFactor            = 1.0f;
+            Vector2i    vScreenSize             = { 256, 240 };
+            Vector2f    vInvScreenSize          = { 1.0f / 256.0f, 1.0f / 240.0f };
+            Vector2i    vPixelSize              = { 4, 4 };
+            Vector2i    vScreenPixelSize        = { 4, 4 };
+            Vector2i    vMousePos               = { 0, 0 };
+            int32_t     nMouseWheelDelta        = 0;
+            Vector2i    vMousePosCache          = { 0, 0 };
+            Vector2i    vMouseWindowPos         = { 0, 0 };
+            int32_t     nMouseWheelDeltaCache   = 0;
+            Vector2i    vWindowSize             = { 0, 0 };
+            Vector2i    vViewPos                = { 0, 0 };
+            Vector2i    vViewSize               = { 0, 0 };
+            bool        bFullScreen             = false;
+            Vector2f    vPixel                  = { 1.0f, 1.0f };
+            bool        bHasInputFocus          = false;
+            bool        bHasMouseFocus          = false;
+            bool        bEnableVSYNC            = false;
+            float       fFrameTimer             = 1.0f;
+            float       fLastElapsed            = 0.0f;
+            int         nFrameCount             = 0;
+            uint32_t    nLastFPS                = 0;
+            bool        bPixelCohesion = false;
+            
             std::function<Color(const int x, const int y, const Color&, const Color&)> funcPixelMode;
             std::chrono::time_point<std::chrono::system_clock> m_tp1, m_tp2;
             
             // Window vars
-            Vector2f   vOffset = { 0, 0 };
-            Vector2f   vScale = { 1, 1 };
-            Sprite*    pDrawTarget = nullptr;
-            uint32_t        nResID = 0;
-            Color      tint = Color::WHITE;
-            std::function<void()> funcHook = nullptr;
+            Vector2f    vOffset              = { 0, 0 };
+            Vector2f    vScale               = { 1, 1 };
+            Sprite*     pDrawTarget          = nullptr;
+            uint32_t    nResID               = 0;
+            Color       tint                 = Color::WHITE;
+            std::function<void()> funcHook  = nullptr;
             
             
-            // State of keyboard
-            bool            pKeyNewState[256] = { 0 };
-            bool            pKeyOldState[256] = { 0 };
-            HWButton        pKeyboardState[256] = { 0 };
+            // Keyboard state
+            bool        pKeyNewState  [256]           = { 0 };
+            bool        pKeyOldState  [256]           = { 0 };
+            HWButton    pKeyboardState[256]           = { 0 };
             
-            // State of mouse
-            bool            pMouseNewState[nMouseButtons] = { 0 };
-            bool            pMouseOldState[nMouseButtons] = { 0 };
-            HWButton        pMouseState[nMouseButtons] = { 0 };
+            // Mouse state
+            bool        pMouseNewState[nMouseButtons] = { 0 };
+            bool        pMouseOldState[nMouseButtons] = { 0 };
+            HWButton    pMouseState   [nMouseButtons] = { 0 };
             
             
-            void EngineThread(); // The main engine thread
-            
-            void koi_ConfigureSystem(); // At the end of this file, chooses which components to compile
+            void EngineThread();                  // The main engine thread
+            void koi_ConfigureSystem();           // At the end of this file, chooses which components to compile
             
             static std::atomic<bool> bAtomActive; // Shutdown flag
             
         public:
-            void koi_UpdateMouse(int32_t x, int32_t y);
-            void koi_UpdateMouseWheel(int32_t delta);
-            void koi_UpdateWindowSize(int32_t x, int32_t y);
-            void koi_UpdateViewport();
-            void koi_ConstructFontSheet();
-            void koi_CoreUpdate();
-            void koi_PrepareEngine();
-            void koi_UpdateMouseState(int32_t button, bool state);
-            void koi_UpdateKeyState(int32_t key, bool state);
-            void koi_UpdateMouseFocus(bool state);
-            void koi_UpdateKeyFocus(bool state);
-            void koi_Terminate();
+            void koi_UpdateMouse        (int32_t x, int32_t y);
+            void koi_UpdateMouseWheel   (int32_t delta);
+            void koi_UpdateWindowSize   (int32_t x, int32_t y);
+            void koi_UpdateViewport     ();
+            void koi_ConstructFontSheet ();
+            void koi_CoreUpdate         ();
+            void koi_PrepareEngine      ();
+            void koi_UpdateMouseState   (int32_t button, bool state);
+            void koi_UpdateKeyState     (int32_t key,    bool state);
+            void koi_UpdateMouseFocus   (bool state);
+            void koi_UpdateKeyFocus     (bool state);
+            void koi_Terminate          ();
             
         };
         
         KoiEngine::KoiEngine() {
-            sAppName = "Undefined";
-            
-            // Bring in relevant Platform & Rendering systems depending
-            // on compiler parameters
-            koi_ConfigureSystem();
+            sAppName = "";
+            koi_ConfigureSystem(); // Bring in relevant Platform & Rendering systems depending on compiler parameters
         }
         
         KoiEngine::~KoiEngine() { }
         
         rcode KoiEngine::Construct(int32_t screen_w, int32_t screen_h, int32_t pixel_w, int32_t pixel_h, bool full_screen, bool vsync, bool cohesion) {
-            bPixelCohesion = cohesion;
-            vScreenSize = { screen_w, screen_h };
-            vInvScreenSize = { 1.0f / float(screen_w), 1.0f / float(screen_h) };
-            vPixelSize = { pixel_w, pixel_h };
-            vWindowSize = vScreenSize * vPixelSize;
-            bFullScreen = full_screen;
-            bEnableVSYNC = vsync;
-            vPixel = 2.0f / vScreenSize;
+            bPixelCohesion  = cohesion;
+            vScreenSize     = { screen_w, screen_h };
+            vInvScreenSize  = { 1.0f / screen_w, 1.0f / screen_h };
+            vPixelSize      = { pixel_w, pixel_h };
+            vWindowSize     = vScreenSize * vPixelSize;
+            bFullScreen     = full_screen;
+            bEnableVSYNC    = vsync;
+            vPixel          = 2.0f / vScreenSize;
             
-            if (vPixelSize.x <= 0 || vPixelSize.y <= 0 || vScreenSize.x <= 0 || vScreenSize.y <= 0)
-                return FAIL;
-            
-            
-            return OK;
+            return (vPixelSize.x <= 0 || vPixelSize.y <= 0 || vScreenSize.x <= 0 || vScreenSize.y <= 0) ? OK : FAIL;
         }
         
         void KoiEngine::SetScreenSize(int w, int h) {
-            vScreenSize = { w, h };
+            vScreenSize    = { w, h };
             vInvScreenSize = { 1.0f / float(w), 1.0f / float(h) };
             delete pDrawTarget; // Erase existing window sprites
             pDrawTarget = new Sprite(vScreenSize.x, vScreenSize.y);
@@ -224,12 +228,11 @@
         }
         
         #if !defined(__APPLE__)
-//        #if !defined(PGE_USE_CUSTOM_START)
             rcode KoiEngine::Start() {
                 if (platform->ApplicationStartUp() != OK) return FAIL;
                 
                 // Construct the window
-                if (platform->CreateWindowPane({ 30,30 }, vWindowSize, bFullScreen) != OK) return FAIL;
+                if (platform->CreateWindowPane({ 30, 30 }, vWindowSize, bFullScreen) != OK) return FAIL;
                 koi_UpdateWindowSize(vWindowSize.x, vWindowSize.y);
                 
                 // Start the thread
@@ -248,34 +251,35 @@
             }
         #endif
         
-        void KoiEngine::SetWindowOffset(const Vector2f& offset) { SetWindowOffset(offset.x, offset.y); }
-        void KoiEngine::SetWindowOffset(float x, float y) { vOffset = { x, y }; }
-        void KoiEngine::SetWindowScale(const Vector2f& scale) { SetWindowScale(scale.x, scale.y); }
-        void KoiEngine::SetWindowScale(float x, float y) { vScale = { x, y }; }
-        void KoiEngine::SetWindowTint(const Color& t_tint) { tint = t_tint; }
-        void KoiEngine::SetWindowCustomRenderFunction(std::function<void()> f) { funcHook = f; }
+        void            KoiEngine::SetWindowOffset  (const Vector2f& offset)  { SetWindowOffset(offset.x, offset.y); }
+        void            KoiEngine::SetWindowOffset  (float x, float y)        { vOffset = { x, y };                  }
+        void            KoiEngine::SetWindowScale   (const Vector2f& scale)   { SetWindowScale(scale.x, scale.y);    }
+        void            KoiEngine::SetWindowScale   (float x, float y)        { vScale = { x, y };                   }
+        void            KoiEngine::SetWindowTint    (const Color& t_tint)     { tint = t_tint;                       }
         
-        Sprite* KoiEngine::GetDrawTarget() const { return pDrawTarget; }
-        int32_t KoiEngine::GetDrawTargetWidth() const { return pDrawTarget ? pDrawTarget->width : 0; }
-        int32_t KoiEngine::GetDrawTargetHeight() const { return pDrawTarget ? pDrawTarget->height : 0; }
+        void            KoiEngine::SetWindowCustomRenderFunction(std::function<void()> f) { funcHook = f; }
         
-        uint32_t KoiEngine::GetFPS() const { return nLastFPS; }
-        bool KoiEngine::IsFocused() const { return bHasInputFocus; }
-        HWButton KoiEngine::GetKey(Key k) const { return pKeyboardState[k]; }
-        HWButton KoiEngine::GetMouse(uint32_t b) const { return pMouseState[b]; }
-        int32_t KoiEngine::GetMouseX() const { return vMousePos.x; }
-        int32_t KoiEngine::GetMouseY() const { return vMousePos.y; }
-        const Vector2i& KoiEngine::GetMousePos() const { return vMousePos; }
-        int32_t KoiEngine::GetMouseWheel() const { return nMouseWheelDelta; }
-        int32_t KoiEngine::ScreenWidth() const { return vScreenSize.x; }
-        int32_t KoiEngine::ScreenHeight() const { return vScreenSize.y; }
-        float KoiEngine::GetElapsedTime() const { return fLastElapsed; }
-        const Vector2i& KoiEngine::GetWindowSize() const { return vWindowSize; }
-        const Vector2i& KoiEngine::GetPixelSize() const { return vPixelSize; }
-        const Vector2i& KoiEngine::GetScreenPixelSize() const { return vScreenPixelSize; }
-        const Vector2i& KoiEngine::GetWindowMouse() const { return vMouseWindowPos; }
+        Sprite*         KoiEngine::GetDrawTarget        ()              const { return pDrawTarget;                           }
+        int32_t         KoiEngine::GetDrawTargetWidth   ()              const { return pDrawTarget ? pDrawTarget->width : 0;  }
+        int32_t         KoiEngine::GetDrawTargetHeight  ()              const { return pDrawTarget ? pDrawTarget->height : 0; }
         
-        bool KoiEngine::Draw(const Vector2i& p, Color c) { return Draw(p.x, p.y, c); }
+        uint32_t        KoiEngine::GetFPS               ()              const { return nLastFPS;                              }
+        bool            KoiEngine::IsFocused            ()              const { return bHasInputFocus;                        }
+        HWButton        KoiEngine::GetKey               (Key k)         const { return pKeyboardState[k];                     }
+        HWButton        KoiEngine::GetMouse             (uint32_t b)    const { return pMouseState[b];                        }
+        int32_t         KoiEngine::GetMouseX            ()              const { return vMousePos.x;                           }
+        int32_t         KoiEngine::GetMouseY            ()              const { return vMousePos.y;                           }
+        const Vector2i& KoiEngine::GetMousePos          ()              const { return vMousePos;                             }
+        int32_t         KoiEngine::GetMouseWheel        ()              const { return nMouseWheelDelta;                      }
+        int32_t         KoiEngine::ScreenWidth          ()              const { return vScreenSize.x;                         }
+        int32_t         KoiEngine::ScreenHeight         ()              const { return vScreenSize.y;                         }
+        float           KoiEngine::GetElapsedTime       ()              const { return fLastElapsed;                          }
+        const Vector2i& KoiEngine::GetWindowSize        ()              const { return vWindowSize;                           }
+        const Vector2i& KoiEngine::GetPixelSize         ()              const { return vPixelSize;                            }
+        const Vector2i& KoiEngine::GetScreenPixelSize   ()              const { return vScreenPixelSize;                      }
+        const Vector2i& KoiEngine::GetWindowMouse       ()              const { return vMouseWindowPos;                       }
+        
+        bool KoiEngine::Draw(const Vector2i& p, Color c)    { return Draw(p.x, p.y, c); }
         bool KoiEngine::Draw(int32_t x, int32_t y, Color c) {
             if (!pDrawTarget) return false;
             if (nColorMode == Color::NORMAL) return pDrawTarget->SetPixel(x, y, c);
@@ -293,7 +297,7 @@
             return false;
         }
         
-        void KoiEngine::DrawLine(const Vector2i& p1, const Vector2i& p2, Color c, uint32_t pattern) { DrawLine(p1.x, p1.y, p2.x, p2.y, c, pattern); }
+        void KoiEngine::DrawLine(const Vector2i& p1,     const Vector2i& p2,     Color c, uint32_t pattern) { DrawLine(p1.x, p1.y, p2.x, p2.y, c, pattern); }
         void KoiEngine::DrawLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, Color c, uint32_t pattern) {
             int x, y, dx = x2 - x1, dy = y2 - y1, dx1, dy1, px, py, xe, ye, i;
             
@@ -341,7 +345,7 @@
             }
         }
         
-        void KoiEngine::DrawCircle(const Vector2i& p, int32_t radius, Color c, uint8_t mask) { DrawCircle(p.x, p.y, radius, c, mask); }
+        void KoiEngine::DrawCircle(const Vector2i& p,    int32_t radius, Color c, uint8_t mask) { DrawCircle(p.x, p.y, radius, c, mask); }
         void KoiEngine::DrawCircle(int32_t x, int32_t y, int32_t radius, Color c, uint8_t mask) {
             if (radius < 0 || x < -radius || y < -radius || x - GetDrawTargetWidth() > radius || y - GetDrawTargetHeight() > radius) return;
             if (radius == 0) { Draw(x, y, c); return; }
@@ -365,7 +369,7 @@
             }
         }
         
-        void KoiEngine::FillCircle(const Vector2i& p, int32_t radius, Color c) { FillCircle(p.x, p.y, radius, c); }
+        void KoiEngine::FillCircle(const Vector2i& p,    int32_t radius, Color c) { FillCircle(p.x, p.y, radius, c); }
         void KoiEngine::FillCircle(int32_t x, int32_t y, int32_t radius, Color c) {
             if (radius < 0 || x < -radius || y < -radius || x - GetDrawTargetWidth() > radius || y - GetDrawTargetHeight() > radius) return;
 
@@ -392,7 +396,7 @@
                 
         }
         
-        void KoiEngine::DrawRect(const Vector2i& p, const Vector2i& size, Color c) { DrawRect(p.x, p.y, size.x, size.y, c); }
+        void KoiEngine::DrawRect(const Vector2i& p,    const Vector2i& size, Color c) { DrawRect(p.x, p.y, size.x, size.y, c); }
         void KoiEngine::DrawRect(int32_t x, int32_t y, int32_t w, int32_t h, Color c) {
             DrawLine(x, y, x + w, y, c);
             DrawLine(x + w, y, x + w, y + h, c);
@@ -400,7 +404,7 @@
             DrawLine(x, y + h, x, y, c);
         }
         
-        void KoiEngine::FillRect(const Vector2i& p, const Vector2i& size, Color c) { FillRect(p.x, p.y, size.x, size.y, c);}
+        void KoiEngine::FillRect(const Vector2i& p,    const Vector2i& size, Color c) { FillRect(p.x, p.y, size.x, size.y, c);}
         void KoiEngine::FillRect(int32_t x, int32_t y, int32_t w, int32_t h, Color c) {
             int32_t x2 = x + w, y2 = y + h;
 
@@ -417,14 +421,14 @@
             for (int i = x; i < x2; i++) for (int j = y; j < y2; j++) Draw(i, j, c);
         }
 
-        void KoiEngine::DrawTriangle(const Vector2i& p1, const Vector2i& p2, const Vector2i& p3, Color c) { DrawTriangle(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, c); }
+        void KoiEngine::DrawTriangle(const Vector2i& p1,     const Vector2i& p2,     const Vector2i& p3,     Color c) { DrawTriangle(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, c); }
         void KoiEngine::DrawTriangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, Color c) {
             DrawLine(x1, y1, x2, y2, c);
             DrawLine(x2, y2, x3, y3, c);
             DrawLine(x3, y3, x1, y1, c);
         }
         
-        void KoiEngine::FillTriangle(const Vector2i& p1, const Vector2i& p2, const Vector2i& p3, Color c) { FillTriangle(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, c); }
+        void KoiEngine::FillTriangle(const Vector2i& p1,     const Vector2i& p2,     const Vector2i& p3,     Color c) { FillTriangle(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, c); }
         void KoiEngine::FillTriangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, Color c) {
             auto drawline = [&](int sx, int ex, int ny) { for (int i = sx; i <= ex; i++) Draw(i, ny, c); };
 
@@ -559,8 +563,7 @@
             }
         }
         
-        void KoiEngine::DrawSprite(const Vector2i& p, Sprite* sprite, uint32_t scale, uint8_t flip) { DrawSprite(p.x, p.y, sprite, scale, flip); }
-
+        void KoiEngine::DrawSprite(const Vector2i& p,    Sprite* sprite, uint32_t scale, uint8_t flip) { DrawSprite(p.x, p.y, sprite, scale, flip); }
         void KoiEngine::DrawSprite(int32_t x, int32_t y, Sprite* sprite, uint32_t scale, uint8_t flip) {
             if (sprite == nullptr) return;
 
@@ -587,8 +590,7 @@
             }
         }
 
-        void KoiEngine::DrawPartialSprite(const Vector2i& p, Sprite* sprite, const Vector2i& origin, const Vector2i& size, uint32_t scale, uint8_t flip) { DrawPartialSprite(p.x, p.y, sprite, origin.x, origin.y, size.x, size.y, scale, flip); }
-
+        void KoiEngine::DrawPartialSprite(const Vector2i& p,    Sprite* sprite, const Vector2i& origin, const Vector2i& size, uint32_t scale, uint8_t flip) { DrawPartialSprite(p.x, p.y, sprite, origin.x, origin.y, size.x, size.y, scale, flip); }
         void KoiEngine::DrawPartialSprite(int32_t x, int32_t y, Sprite* sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale, uint8_t flip) {
             if (sprite == nullptr) return;
 
@@ -599,8 +601,7 @@
             
             fx = fxs;
             if (scale > 1) {
-                for (int32_t i = 0; i < w; i++, fx += fxm)
-                {
+                for (int32_t i = 0; i < w; i++, fx += fxm) {
                     fy = fys;
                     for (int32_t j = 0; j < h; j++, fy += fym)
                         for (uint32_t is = 0; is < scale; is++)
@@ -622,9 +623,9 @@
             for (int i = 0; i < pixels; i++) m[i] = p;
         }
         
-        void KoiEngine::ClearBuffer(Color p, bool bDepth) { renderer->ClearBuffer(p, bDepth); }
-        void KoiEngine::SetPixelMode(Color::Mode m) { nColorMode = m; }
-        Color::Mode KoiEngine::GetPixelMode() { return nColorMode; }
+        void        KoiEngine::ClearBuffer (Color p, bool bDepth)   { renderer->ClearBuffer(p, bDepth); }
+        void        KoiEngine::SetPixelMode(Color::Mode m)          { nColorMode = m;                   }
+        Color::Mode KoiEngine::GetPixelMode()                       { return nColorMode;                }
         
         void KoiEngine::SetPixelMode(std::function<Color(const int x, const int y, const Color&, const Color&)> pixelMode) {
             funcPixelMode = pixelMode;
@@ -637,9 +638,9 @@
             if (fBlendFactor > 1.0f) fBlendFactor = 1.0f;
         }
         
-        bool KoiEngine::OnUserCreate() { return false; }
-        bool KoiEngine::OnUserUpdate(float fElapsedTime) { UNUSED(fElapsedTime);  return false; }
-        bool KoiEngine::OnUserDestroy() { return true; }
+        bool KoiEngine::OnUserCreate()                      { return false;                        }
+        bool KoiEngine::OnUserUpdate(float fElapsedTime)    { UNUSED(fElapsedTime);  return false; }
+        bool KoiEngine::OnUserDestroy()                     { return true;                         }
         
         void KoiEngine::koi_UpdateViewport() {
             int32_t ww = vScreenSize.x * vPixelSize.x;
@@ -662,10 +663,7 @@
             vViewPos = (vWindowSize - vViewSize) / 2;
         }
         
-        void KoiEngine::koi_UpdateWindowSize(int32_t x, int32_t y) {
-            vWindowSize = { x, y };
-            koi_UpdateViewport();
-        }
+        void KoiEngine::koi_UpdateWindowSize(int32_t x, int32_t y) { vWindowSize = { x, y }; koi_UpdateViewport(); }
         
         void KoiEngine::koi_UpdateMouseWheel(int32_t delta) { nMouseWheelDeltaCache += delta; }
         
@@ -685,31 +683,24 @@
             if (vMousePosCache.y < 0) vMousePosCache.y = 0;
         }
         
-        void KoiEngine::koi_UpdateMouseState(int32_t button, bool state) { pMouseNewState[button] = state; }
-        void KoiEngine::koi_UpdateKeyState(int32_t key, bool state) { pKeyNewState[key] = state; }
-        void KoiEngine::koi_UpdateMouseFocus(bool state) { bHasMouseFocus = state; }
-        void KoiEngine::koi_UpdateKeyFocus(bool state) { bHasInputFocus = state; }
-        void KoiEngine::koi_Terminate() { bAtomActive = false; }
+        void KoiEngine::koi_UpdateMouseState    (int32_t button, bool state)    { pMouseNewState[button] = state; }
+        void KoiEngine::koi_UpdateKeyState      (int32_t key, bool state)       { pKeyNewState[key] = state;      }
+        void KoiEngine::koi_UpdateMouseFocus    (bool state)                    { bHasMouseFocus = state;         }
+        void KoiEngine::koi_UpdateKeyFocus      (bool state)                    { bHasInputFocus = state;         }
+        void KoiEngine::koi_Terminate           ()                              { bAtomActive = false;            }
         
         void KoiEngine::EngineThread() {
-            // Allow platform to do stuff here if needed, since its now in the
-            // context of this thread
-            if (platform->ThreadStartUp() == FAIL) return;
+            if (platform->ThreadStartUp() == FAIL) return;  // Allow platform to do stuff here if needed, since its now in the context of this thread
             
-            // Do engine context specific initialisation
-            koi_PrepareEngine();
+            koi_PrepareEngine();                            // Do engine context specific initialisation
             
-            // Create user resources as part of this thread
-            if (!OnUserCreate()) bAtomActive = false;
+            if (!OnUserCreate()) bAtomActive = false;       // Create user resources as part of this thread
             
             while (bAtomActive) {
-                // Run as fast as possible
-                while (bAtomActive) { koi_CoreUpdate(); }
+                while (bAtomActive) { koi_CoreUpdate(); }   // Run as fast as possible
                 
-                // Allow the user to free resources if they have overrided the destroy function
-                if (!OnUserDestroy()) {
-                    // User denied destroy for some reason, so continue running
-                    bAtomActive = true;
+                if (!OnUserDestroy()) {                     // Allow the user to free resources if they have overrided the destroy function
+                    bAtomActive = true;                     // User denied destroy for some reason, so continue running
                 }
             }
             
@@ -720,13 +711,10 @@
             // Start OpenGL, the context is owned by the game thread
             if (platform->CreateGraphics(bFullScreen, bEnableVSYNC, vViewPos, vViewSize) == FAIL) return;
             
-            
             // Create Primary window "0"
             pDrawTarget = new Sprite(vScreenSize.x, vScreenSize.y);
             nResID = renderer->CreateTexture(vScreenSize.x, vScreenSize.y);
             renderer->UpdateTexture(nResID, pDrawTarget);
-            
-            
             
             m_tp1 = std::chrono::system_clock::now();
             m_tp2 = std::chrono::system_clock::now();
@@ -742,8 +730,8 @@
             float fElapsedTime = elapsedTime.count();
             fLastElapsed = fElapsedTime;
             
-            // Some platforms will need to check for events
-            platform->HandleSystemEvent();
+            
+            platform->HandleSystemEvent(); // Some platforms will need to check for events
             
             // Compare hardware input states from previous frame
             auto ScanHardware = [&](HWButton* pKeys, bool* pStateOld, bool* pStateNew, uint32_t nKeyCount) {
@@ -771,11 +759,8 @@
             nMouseWheelDelta = nMouseWheelDeltaCache;
             nMouseWheelDeltaCache = 0;
             
-            // renderer->ClearBuffer(BLACK, true);
             
-            // Handle Frame Update
-            if (!OnUserUpdate(fElapsedTime))
-                bAtomActive = false;
+            if (!OnUserUpdate(fElapsedTime)) bAtomActive = false; // Handle Frame Update
             
             // Display Frame
             renderer->UpdateViewport(vViewPos, vViewSize);
@@ -786,16 +771,12 @@
             if (funcHook == nullptr) {
                 renderer->ApplyTexture(nResID);
                 renderer->UpdateTexture(nResID, pDrawTarget);
-                
                 renderer->DrawWindowQuad(vOffset, vScale, tint);
                 
-            } else {
-                // Mwa ha ha.... Have Fun!!!
-                funcHook();
-            }
+            } else funcHook();
             
-            // Present Graphics to screen
-            renderer->DisplayFrame();
+            
+            renderer->DisplayFrame(); // Present Graphics to screen
             
             // Update Title Bar
             fFrameTimer += fElapsedTime;
